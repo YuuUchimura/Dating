@@ -11,7 +11,7 @@ import { LoggedInRoute } from "./LoggedInRoute";
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Switch>
           <LoggedInRoute exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
