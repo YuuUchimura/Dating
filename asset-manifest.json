@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Dating/static/css/main.71609c1f.css",
-    "main.js": "/Dating/static/js/main.903f6323.js",
+    "main.js": "/Dating/static/js/main.f4e8b651.js",
     "static/js/787.2c7b9aca.chunk.js": "/Dating/static/js/787.2c7b9aca.chunk.js",
     "index.html": "/Dating/index.html",
     "main.71609c1f.css.map": "/Dating/static/css/main.71609c1f.css.map",
-    "main.903f6323.js.map": "/Dating/static/js/main.903f6323.js.map",
+    "main.f4e8b651.js.map": "/Dating/static/js/main.f4e8b651.js.map",
     "787.2c7b9aca.chunk.js.map": "/Dating/static/js/787.2c7b9aca.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.71609c1f.css",
-    "static/js/main.903f6323.js"
+    "static/js/main.f4e8b651.js"
   ]
 }
