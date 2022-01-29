@@ -2,26 +2,40 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../AuthService";
 import firebase from "../config/firebase";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { Post } from "./templates/post";
+
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Collapse from "@mui/material/Collapse";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { red } from "@mui/material/colors";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 export const Home = () => {
   const [plans, setPlans] = useState([]);
-  const [title, setTitle] = useState("");
-  const [coment, setComent] = useState("");
-  const [location1, setLocation1] = useState("");
-  const [location2, setLocation2] = useState("");
-  const [img, setImg] = useState("");
 
+  const [expanded, setExpanded] = React.useState(false);
 
-  const containerStyle = {
-  width: '400px',
-  height: '400px'
-};
-
-const center = {
-  lat: 35.6809591,
-  lng: 139.7673068,
-};
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   useEffect(() => {
     firebase
@@ -31,82 +45,62 @@ const center = {
         const plans = snapshot.docs.map((doc) => {
           return doc.data();
         });
-
         setPlans(plans);
       });
   }, []);
 
   const user = useContext(AuthContext);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    firebase.firestore().collection("DatePlan").add({
-      user: user.displayName,
-      title: title,
-      img: img,
-      location1: location1,
-      location2: location2,
-      coment: coment,
-    });
-    setTitle("");
-    setImg("");
-    setLocation1("");
-    setLocation2("");
-    setComent("");
-  };
   return (
     <>
       <h1>Home</h1>
+      <Post />
       <ul>
         {plans.map((plan) => (
-          <li>
-            {plan.user}:{plan.title}
-          </li>
+          <>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardHeader
+                avatar={
+                  <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                    R
+                  </Avatar>
+                }
+                title={plan.title}
+                subheader="September 14, 2016"
+              />
+              <CardMedia
+                component="img"
+                height="194"
+                image="/static/images/cards/paella.jpg"
+                alt="Paella dish"
+              />
+              <CardContent>
+                <Typography variant="body2" color="text.secondary">
+                  {}
+                </Typography>
+              </CardContent>
+              <CardActions disableSpacing>
+                <ExpandMore
+                  expand={expanded}
+                  onClick={handleExpandClick}
+                  aria-expanded={expanded}
+                  aria-label="show more"
+                >
+                  <ExpandMoreIcon />
+                </ExpandMore>
+              </CardActions>
+              <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <CardContent>
+                  <Typography paragraph>
+                    {plan.comment}
+                  </Typography>
+                </CardContent>
+              </Collapse>
+            </Card>
+          </>
         ))}
       </ul>
-      <form>
-        <h1>タイトル</h1>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <h1>サムネ写真</h1>
-        <input
-          type="text"
-          value={img}
-          onChange={(e) => setImg(e.target.value)}
-        />
-        <h1>デートスポット１</h1>
-        <input
-          type="text"
-          value={location1}
-          onChange={(e) => setLocation1(e.target.value)}
-        />
-        <h1>デートスポット２</h1>
-        <input
-          type="text"
-          value={location2}
-          onChange={(e) => setLocation2(e.target.value)}
-        />
-        <h1>コメント</h1>
-        <input
-          type="text"
-          value={coment}
-          onChange={(e) => setComent(e.target.value)}
-        />
-      </form>
-      <button type="submit" onClick={handleSubmit}>
-        送信
-      </button>
-
       <button onClick={() => firebase.auth().signOut()}>ログアウト</button>
-
-      <LoadScript googleMapsApiKey="AIzaSyCFm7KI6nHVnYoiaMWRs3-xWdCG4VTXK5A">
-        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
-          <Marker position={center} />
-        </GoogleMap>
-      </LoadScript>
     </>
   );
 };
