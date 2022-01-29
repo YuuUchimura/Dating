@@ -76,7 +76,7 @@ export const Home = () => {
               />
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                  {}
+                  {plan.SubTitle}
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
@@ -91,9 +91,7 @@ export const Home = () => {
               </CardActions>
               <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                  <Typography paragraph>
-                    {plan.comment}
-                  </Typography>
+                  <Typography paragraph>{plan.comment}</Typography>
                 </CardContent>
               </Collapse>
             </Card>
