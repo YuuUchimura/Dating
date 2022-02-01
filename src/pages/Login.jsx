@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Redirect, Link } from "react-router-dom";
-import firebase from "../config/firebase";
+import { auth } from "../config/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { AuthContext } from "../AuthService";
 
 const Login = ({ history }) => {
@@ -11,9 +12,7 @@ const Login = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         history.push("/");
       })

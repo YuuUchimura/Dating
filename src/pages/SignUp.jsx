@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import firebase from "../config/firebase";
+import { auth } from "../config/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -8,9 +9,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
         user.updateProfile({
           displayName: name,

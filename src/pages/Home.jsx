@@ -1,8 +1,12 @@
 //components
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../AuthService";
-import firebase from "../config/firebase";
+import { db, auth } from "../config/firebase";
+import { signOut } from "firebase/auth";
+import { query, onSnapshot, collection, orderBy } from "firebase/firestore";
 import { Post } from "./templates/post";
+
+import GoogleMapReact from "google-map-react";
 
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -30,32 +34,49 @@ const ExpandMore = styled((props) => {
 
 export const Home = () => {
   const [plans, setPlans] = useState([]);
-
+  const [images, setImages] = useState(true);
   const [expanded, setExpanded] = React.useState(false);
+  const [map, setMap] = useState(null);
+  const [maps, setMaps] = useState(null);
+  const [geocoder, setGeocoder] = useState(null);
+
+  const handleApiLoaded = (obj) => {
+    setMap(obj.map);
+    setMaps(obj.maps);
+    setGeocoder(new obj.maps.Geocoder());
+  };
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  const MediaStyle = {
+    height: "345px",
+    width: "345px",
+  };
+
   useEffect(() => {
-    firebase
-      .firestore()
-      .collection("DatePlan")
-      .onSnapshot((snapshot) => {
-        const plans = snapshot.docs.map((doc) => {
-          return doc.data();
-        });
-        setPlans(plans);
+    const q = query(collection(db, "DatePlan"), orderBy("timeStamp", "desc"));
+    onSnapshot(q, (snapshot) => {
+      const plans = snapshot.docs.map((doc) => {
+        return doc.data();
       });
+      setPlans(plans);
+    });
   }, []);
 
   const user = useContext(AuthContext);
+
+  const s = () => {
+    setImages(!images);
+  };
 
   return (
     <>
       <h1>Home</h1>
       <Post />
-      <ul>
+      <ul className="mx-auto">
         {plans.map((plan) => (
           <>
             <Card sx={{ maxWidth: 345 }}>
@@ -66,14 +87,30 @@ export const Home = () => {
                   </Avatar>
                 }
                 title={plan.title}
-                subheader="September 14, 2016"
+                subheader={plan.address}
               />
-              <CardMedia
-                component="img"
-                height="194"
-                image="/static/images/cards/paella.jpg"
-                alt="Paella dish"
-              />
+              <span onClick={s}>ボタン</span>
+              {images ? (
+                <CardMedia
+                  component="img"
+                  sx={MediaStyle}
+                  image={plan.img}
+                  alt="Paella dish"
+                />
+              ) : (
+                <div
+                  style={{ margin: "0 auto", height: "100px", width: "90%" }}
+                >
+                  <GoogleMapReact
+                    bootstrapURLKeys={{
+                      key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+                    }}
+                    defaultCenter={{ lat: plan.lat, lng: plan.lng }}
+                    defaultZoom={15}
+                    onGoogleApiLoaded={handleApiLoaded}
+                  />
+                </div>
+              )}
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
                   {plan.SubTitle}
@@ -98,7 +135,7 @@ export const Home = () => {
           </>
         ))}
       </ul>
-      <button onClick={() => firebase.auth().signOut()}>ログアウト</button>
+      <button onClick={() => signOut(auth)}>ログアウト</button>
     </>
   );
 };

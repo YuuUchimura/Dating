@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import GoogleMapReact from "google-map-react";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { PostTextField } from "../molequres/PostTextField";
 
-export const SearchAndMap1 = ({ setLat, setLng, address, setAddress }) => {
+export const SearchAndMap1 = ({
+  setLat,
+  setLng,
+  address,
+  setAddress,
+  label,
+}) => {
   const [map, setMap] = useState(null);
   const [maps, setMaps] = useState(null);
   const [geocoder, setGeocoder] = useState(null);
@@ -43,20 +49,27 @@ export const SearchAndMap1 = ({ setLat, setLng, address, setAddress }) => {
       }
     );
   };
+
+  const buttonStyle = {
+    backgroundColor: "#ff00ff",
+    "&:hover": {
+      backgroundColor: "#ff00ff",
+      opacity: 0.8,
+    },
+  };
   return (
     <>
-      <TextField
-        required
-        id="standard-required"
-        label="デートスポット１"
-        variant="standard"
+      <PostTextField
+        label={label}
         value={address}
         onChange={(e) => setAddress(e.target.value)}
       />
-      <Button variant="contained" onClick={search}>
-        検索
-      </Button>
-      <div style={{ height: "200px", width: "200px" }}>
+      <div className="text-right my-2">
+        <Button sx={buttonStyle} variant="contained" onClick={search}>
+          検索
+        </Button>
+      </div>
+      <div style={{ margin: "0 auto", height: "100px", width: "90%" }}>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,

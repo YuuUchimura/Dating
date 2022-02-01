@@ -1,16 +1,17 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCLS5GAMwadj82Qz1Ol5LboqJ1Ds5NKCPg",
-  authDomain: "dating-e2e6a.firebaseapp.com",
-  projectId: "dating-e2e6a",
-  storageBucket: "dating-e2e6a.appspot.com",
-  messagingSenderId: "12792580097",
-  appId: "1:12792580097:web:188c77f1c4aa3113649800",
-};
+const firebaseConfig = initializeApp({
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGEGING_SENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+});
 
-firebase.initializeApp(firebaseConfig);
-
-export default firebase;
+export const storage = getStorage(firebaseConfig);
+export const auth = getAuth(firebaseConfig);
+export const db = getFirestore(firebaseConfig);
