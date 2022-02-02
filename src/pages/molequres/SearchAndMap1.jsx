@@ -3,13 +3,7 @@ import GoogleMapReact from "google-map-react";
 import Button from "@mui/material/Button";
 import { PostTextField } from "../molequres/PostTextField";
 
-export const SearchAndMap1 = ({
-  setLat,
-  setLng,
-  address,
-  setAddress,
-  label,
-}) => {
+export const SearchAndMap1 = ({ setAddress, address, label }) => {
   const [map, setMap] = useState(null);
   const [maps, setMaps] = useState(null);
   const [geocoder, setGeocoder] = useState(null);
@@ -29,7 +23,7 @@ export const SearchAndMap1 = ({
   const search = () => {
     geocoder.geocode(
       {
-        address,
+        address: address.name,
       },
       (results, status) => {
         if (status === maps.GeocoderStatus.OK) {
@@ -44,8 +38,13 @@ export const SearchAndMap1 = ({
             })
           );
         }
-        setLat(results[0].geometry.location.lat());
-        setLng(results[0].geometry.location.lng());
+        setAddress({
+          name: address.name,
+          location: {
+            lat: results[0].geometry.location.lat(),
+            lng: results[0].geometry.location.lng(),
+          },
+        });
       }
     );
   };
@@ -61,8 +60,10 @@ export const SearchAndMap1 = ({
     <>
       <PostTextField
         label={label}
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
+        value={address.name}
+        onChange={(e) =>
+          setAddress({ location: address.location, name: e.target.value })
+        }
       />
       <div className="text-right my-2">
         <Button sx={buttonStyle} variant="contained" onClick={search}>

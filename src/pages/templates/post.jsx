@@ -12,28 +12,25 @@ import { randomStr } from "../../utils/randomStr";
 import { addDoc, query, collection, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
+import { DateGenre } from "../atoms/DateGenre";
 
 const CommentPlaceholder =
   "詳細やおすすめのルート（裏道、食べ歩きスポット等）を記載してください";
+
 export const Post = () => {
   const [title, setTitle] = useState("");
-  const [SubTitle, setSubTitle] = useState("");
   const [description, setDescription] = useState("");
   const [img, setImg] = useState("");
-  const [address, setAddress] = useState("");
-  const [address2, setAddress2] = useState("");
-  const [address3, setAddress3] = useState("");
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
-  const [lat2, setLat2] = useState(null);
-  const [lng2, setLng2] = useState(null);
-  const [lat3, setLat3] = useState(null);
-  const [lng3, setLng3] = useState(null);
+  const [addresses, setAddressees] = useState([
+    { location: { lat: null, lng: null }, name: "" },
+    { location: { lat: null, lng: null }, name: "" },
+    { location: { lat: null, lng: null }, name: "" },
+  ]);
+
   const [imageIsSelected, setImageIsSelected] = useState(false);
   const [prevAvatar, setPrevAvatar] = useState("");
   const [open, setOpen] = React.useState(false);
-  const [route1, setRoute1] = useState("");
-  const [route2, setRoute2] = useState("");
+  const [genre, setGenre] = useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -49,7 +46,6 @@ export const Post = () => {
       const randomChar = randomStr();
       const fileName = randomChar + "_" + img.name;
       const imageRef = `images/${fileName}`;
-
       const uploadMsgImage = uploadBytesResumable(ref(storage, imageRef), img);
 
       uploadMsgImage.on(
@@ -65,17 +61,8 @@ export const Post = () => {
               userid: user.uid,
               title: title,
               img: url,
-              address: address,
-              address2: address2,
-              address3: address3,
-              route1: route1,
-              route2: route2,
-              lat: lat,
-              lng: lng,
-              lat2: lat2,
-              lng2: lng2,
-              lat3: lat3,
-              lng3: lng3,
+              addresses: addresses,
+              genre: genre,
               descriptipn: description,
               timeStamp: serverTimestamp(),
             });
@@ -85,12 +72,12 @@ export const Post = () => {
     }
     setTitle("");
     setImg("");
-    setAddress("");
-    setAddress2("");
-    setLat("");
-    setLng("");
-    setLat2("");
-    setLng2("");
+    setAddressees([
+      { location: { lat: null, lng: null }, name: "" },
+      { location: { lat: null, lng: null }, name: "" },
+      { location: { lat: null, lng: null }, name: "" },
+    ]);
+    setGenre([]);
     setDescription("");
     handleClose();
   };
@@ -135,6 +122,12 @@ export const Post = () => {
     }
   };
 
+  const setAddress = (index) => (address) => {
+    let newAddresses = [...addresses];
+    newAddresses[index] = address;
+    setAddressees(newAddresses);
+  };
+
   return (
     <div>
       <Button onClick={handleOpen}>投稿</Button>
@@ -155,11 +148,7 @@ export const Post = () => {
               />
             </div>
             <div>
-              <PostTextField
-                label={"サブタイトル"}
-                onChange={(e) => setSubTitle(e.target.value)}
-                value={SubTitle}
-              />
+              <DateGenre genre={genre} setGenre={setGenre} />
             </div>
             <div>
               <Box className="text-left">
@@ -182,62 +171,31 @@ export const Post = () => {
                 </IconButton>
               </Box>
             </div>
-            <div>
-              タグ
-              <select name="genre">
-                <option value="man"></option>
-              </select>
-            </div>
-            <SearchAndMap1
-              label={"デートスポット１"}
-              setLat={setLat}
-              setLng={setLng}
-              address={address}
-              setAddress={setAddress}
-            />
-            <div className="my-5">
-              <PostTextField
-                id={"time"}
-                label={"１から２の時間"}
-                type={"time"}
-                defaultValue={"00:00"}
-                variant={"standard"}
-                width={"13vh"}
-                onChange={(e) => setRoute1(e.target.value)}
-              />
-            </div>
-            <SearchAndMap1
-              label={"デートスポット２"}
-              setLat={setLat2}
-              setLng={setLng2}
-              address={address2}
-              setAddress={setAddress2}
-            />
-            <div className="my-5">
-              <PostTextField
-                id={"time"}
-                label={"２から３の時間"}
-                type={"time"}
-                defaultValue={"00:00"}
-                variant={"standard"}
-                width={"13vh"}
-                onChange={(e) => setRoute2(e.target.value)}
-              />
-            </div>
-            <SearchAndMap1
-              label={"デートスポット３"}
-              setLat={setLat3}
-              setLng={setLng3}
-              address={address3}
-              setAddress={setAddress3}
-            />
-
+            {addresses.map((address, index) => {
+              return (
+                <>
+                  <SearchAndMap1
+                    label={`デートスポット${index + 1}`}
+                    setAddress={setAddress(index)}
+                    address={address}
+                  />
+                  <div className="my-5">
+                    <PostTextField
+                      id={"time"}
+                      label={`${index + 1}から${index + 2}の時間`}
+                      type={"time"}
+                      defaultValue={"00:00"}
+                      width={"13vh"}
+                    />
+                  </div>
+                </>
+              );
+            })}
             <div className="my-5">
               <PostTextField
                 id={"outlined-multiline-static"}
                 label={"デート詳細"}
                 placeholder={CommentPlaceholder}
-                // variant={"outline"}
                 multiline
                 rows={4}
                 onChange={(e) => setDescription(e.target.value)}

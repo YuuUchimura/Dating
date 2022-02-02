@@ -4,6 +4,7 @@ import "./App.css";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import { Home } from "./pages/Home";
+import Profile from "./pages/Profile";
 import "./styles/global.css"
 
 import { AuthProvider } from "./AuthService";
@@ -17,6 +18,7 @@ function App() {
           <LoggedInRoute exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/profile" component={Profile} />
         </Switch>
       </BrowserRouter>
     </AuthProvider>
