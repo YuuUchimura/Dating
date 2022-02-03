@@ -29,7 +29,7 @@ export const Home = () => {
       <Post />
       <ul className="mx-auto">
         {plans.map((plan) => {
-          return <DateCard  plan={plan} />;
+          return <DateCard plan={plan} />;
         })}
       </ul>
       <button onClick={() => signOut(auth)}>ログアウト</button>

@@ -4,7 +4,7 @@ import "./App.css";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import { Home } from "./pages/Home";
-import Profile from "./pages/Profile";
+import {Profile} from "./pages/Profile";
 import "./styles/global.css"
 
 import { AuthProvider } from "./AuthService";

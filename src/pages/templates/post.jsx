@@ -22,9 +22,9 @@ export const Post = () => {
   const [description, setDescription] = useState("");
   const [img, setImg] = useState("");
   const [addresses, setAddressees] = useState([
-    { location: { lat: null, lng: null }, name: "" },
-    { location: { lat: null, lng: null }, name: "" },
-    { location: { lat: null, lng: null }, name: "" },
+    { location: { lat: null, lng: null }, name: "", id: 1 },
+    { location: { lat: null, lng: null }, name: "", id: 2 },
+    { location: { lat: null, lng: null }, name: "", id: 3 },
   ]);
 
   const [imageIsSelected, setImageIsSelected] = useState(false);
@@ -73,9 +73,9 @@ export const Post = () => {
     setTitle("");
     setImg("");
     setAddressees([
-      { location: { lat: null, lng: null }, name: "" },
-      { location: { lat: null, lng: null }, name: "" },
-      { location: { lat: null, lng: null }, name: "" },
+      { location: { lat: null, lng: null }, name: "", id: "" },
+      { location: { lat: null, lng: null }, name: "", id: "" },
+      { location: { lat: null, lng: null }, name: "", id: "" },
     ]);
     setGenre([]);
     setDescription("");
@@ -178,6 +178,7 @@ export const Post = () => {
                     label={`デートスポット${index + 1}`}
                     setAddress={setAddress(index)}
                     address={address}
+                    id={index}
                   />
                   <div className="my-5">
                     <PostTextField

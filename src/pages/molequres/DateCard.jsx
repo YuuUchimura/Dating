@@ -29,13 +29,30 @@ const MediaStyle = {
 };
 
 export const DateCard = ({ plan }) => {
-  const [images, setImages] = useState(true);
   const [expanded, setExpanded] = useState(false);
+  const [sellectAddresses, setSellectAddresses] = useState(plan.addresses);
+  const [isOpenImage, setOpenIsImage] = useState(true);
+  const [currentAddress, setCurrentAddress] = useState(plan.addresses[0]);
 
-  const s = () => {
-    setImages(!images);
+  const changeViewMap = (id) => {
+    if (isOpenImage) {
+      setOpenIsImage(!isOpenImage);
+      setCurrentAddress(sellectAddresses[id]);
+    } else {
+      if (currentAddress.id === id) {
+        setOpenIsImage(!isOpenImage);
+      } else {
+        setCurrentAddress(
+          sellectAddresses.find(
+            (sellectAddress) => () => {
+              console.log(sellectAddress.id);
+            }
+            // sellectAddress.id - 1 === id
+          )
+        );
+      }
+    }
   };
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -47,10 +64,17 @@ export const DateCard = ({ plan }) => {
           avatar={<Avatar sx={{ bgcolor: red[500] }}>R</Avatar>}
           title={plan.title}
         />
-        {/* <span onClick={s}>{plan.}</span> */}
-        {/* <span onClick={s}>{plan.address2}</span>
-        <span onClick={s}>{plan.address3}</span> */}
-        {images ? (
+        {sellectAddresses.map((sellectAddress) => (
+          <div className="flex justify-around">
+            <span
+              key={sellectAddress.id}
+              onClick={() => changeViewMap(sellectAddress.id - 1)}
+            >
+              {sellectAddress.name}
+            </span>
+          </div>
+        ))}
+        {isOpenImage ? (
           <CardMedia component="img" sx={MediaStyle} image={plan.img} />
         ) : (
           <div style={{ height: "345px" }}>
@@ -58,15 +82,13 @@ export const DateCard = ({ plan }) => {
               bootstrapURLKeys={{
                 key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
               }}
-              defaultCenter={{ lat: plan.location.lat, lng: plan.location.lng }}
+              defaultCenter={currentAddress.location}
               defaultZoom={15}
             />
           </div>
         )}
         <CardContent>
-          <Typography>
-            <div className="w-20 rounded-full bg-gray-200">{plan.genre}</div>
-          </Typography>
+          <div className="w-20 rounded-full bg-gray-200">{plan.genre}</div>
         </CardContent>
         <CardActions disableSpacing>
           <ExpandMore
