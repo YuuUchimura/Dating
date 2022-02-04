@@ -28,7 +28,6 @@ const MediaStyle = {
   width: "345px",
 };
 
-
 export const DateCard = ({ plan }) => {
   const [expanded, setExpanded] = useState(false);
   const [sellectAddresses, setSellectAddresses] = useState(plan.addresses);
@@ -96,7 +95,12 @@ export const DateCard = ({ plan }) => {
           </div>
         )}
         <CardContent>
-          <div className="w-20 rounded-full bg-gray-200">{plan.genre}</div>
+          <div className="w-20 rounded-full bg-gray-200">
+            {/* {plan.genre.map((p) => {
+              <div className="w-20 rounded-full bg-gray-200">{p}</div>;
+            })} */}
+            {plan.genre}
+          </div>
         </CardContent>
         <CardActions disableSpacing>
           <ExpandMore

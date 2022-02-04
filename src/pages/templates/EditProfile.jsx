@@ -35,39 +35,42 @@ export const EditProfile = () => {
 
   const user = useContext(AuthContext);
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const UserRef = "user";
-    const ARef = doc(db, UserRef);
+    const ARef = doc(db, UserRef, user.uid);
     // const ARef = collection(db, UserRef);
     // const q = query(ARef);
 
-    // if (img) {
-    //   const randomChar = randomStr();
-    //   const fileName = randomChar + "_" + img.name;
-    //   const imageRef = `images/${fileName}`;
-    //   const uploadMsgImage = uploadBytesResumable(ref(storage, imageRef), img);
+    if (img) {
+      const randomChar = randomStr();
+      const fileName = randomChar + "_" + img.name;
+      const imageRef = `images/${fileName}`;
+      const uploadMsgImage = uploadBytesResumable(ref(storage, imageRef), img);
 
-    //   uploadMsgImage.on(
-    //     "state_changed",
-    //     () => {},
-    //     (err) => {
-    //       alert(err.message);
-    //     },
-    //     async () => {
-    //       await getDownloadURL(ref(storage, imageRef)).then(async (url) => {
+      uploadMsgImage.on(
+        "state_changed",
+        () => {},
+        (err) => {
+          alert(err.message);
+        },
+        async () => {
+          await getDownloadURL(ref(storage, imageRef)).then(async (url) => {
             await setDoc(ARef, {
               user: user.displayName,
               userid: user.uid,
               name: name,
-              // img: url,
+              img: url,
+              sex: sex,
+              age: age,
+              address: address,
               selfIntroduction: selfIntroduction,
               timeStamp: serverTimestamp(),
             });
-    //       });
-    //     }
-    //   );
-    // }
+          });
+        }
+      );
+    }
     setImg("");
     setName("");
     setSex("");
@@ -76,6 +79,7 @@ export const EditProfile = () => {
     setSelfIntroduction("");
     handleClose();
   };
+
   const buttonStyle = {
     backgroundColor: "#ff00ff",
     "&:hover": {
@@ -116,7 +120,7 @@ export const EditProfile = () => {
   };
   return (
     <>
-      <Button onClick={handleOpen}>プロフィール編集</Button>
+      <Button onClick={handleOpen}>プロフィール</Button>
       <div>
         <Modal
           open={open}

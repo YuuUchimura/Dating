@@ -3,25 +3,54 @@ import { AuthContext } from "../AuthService";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../config/firebase";
 import { EditProfile } from "./templates/EditProfile";
-import { query, onSnapshot, collection } from "firebase/firestore";
+import {
+  query,
+  onSnapshot,
+  collection,
+  where,
+} from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 export const Profile = () => {
+  const [rrr, setRrr] = useState([]);
   const [currentUsers, setCurrentUsers] = useState([]);
   const user = useContext(AuthContext);
+
   useEffect(() => {
-    const q = query(collection(db, "user"));
-    onSnapshot(q, (snapshot) => {
-      const currentUsers = snapshot.docs.map((doc) => {
-        return doc.data();
-      });
-      setCurrentUsers(currentUsers);
+    const q = query(
+      collection(db, "DatePlan"),
+      where("genre", "==", "ランチ")
+    );
+    const unSub = onSnapshot(q, (snapshot) => {
+      setRrr(
+        snapshot.docs.map(
+          (doc) =>
+            doc.data().title
+        )
+      );
     });
+    return () => {
+      unSub();
+    };
   }, []);
+
+  // const a = async () => {
+  //   const citiesRef = collection(db, "DatePlan");
+  //   const q = query(citiesRef, where("genre", "==", "ランチ"));
+  //   const querySnapshot = await getDocs(q);
+  //   // console.log(querySnapshot);
+  //   querySnapshot.forEach((doc) => {
+  //     // console.log(`${doc}`);
+  //     console.log("tanaka");
+  //     // console.log(`${doc.id}:${doc.data()}`);
+  //   });
+  // };
 
   return (
     <div className="w-10/12 mx-auto">
+      <div>{rrr}</div>
       <header className="h-12 flex justify-between">
+        {/* <button onClick={a}>ぼたん</button> */}
         <div>ロゴ</div>
         {/* <img src="" alt="" /> */}
         <div>
