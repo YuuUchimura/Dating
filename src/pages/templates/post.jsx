@@ -21,6 +21,7 @@ export const Post = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [img, setImg] = useState("");
+  const [route, setRoute] = useState("");
   const [addresses, setAddressees] = useState([
     { location: { lat: null, lng: null }, name: "", id: 1 },
     { location: { lat: null, lng: null }, name: "", id: 2 },
@@ -63,7 +64,8 @@ export const Post = () => {
               img: url,
               addresses: addresses,
               genre: genre,
-              descriptipn: description,
+              route: route,
+              descriptipon: description,
               timeStamp: serverTimestamp(),
             });
           });
@@ -78,6 +80,7 @@ export const Post = () => {
       { location: { lat: null, lng: null }, name: "", id: "" },
     ]);
     setGenre([]);
+    setRoute("");
     setDescription("");
     handleClose();
   };
@@ -187,6 +190,7 @@ export const Post = () => {
                       type={"time"}
                       defaultValue={"00:00"}
                       width={"13vh"}
+                      onChange={(e) => setRoute(e.target.value)}
                     />
                   </div>
                 </>

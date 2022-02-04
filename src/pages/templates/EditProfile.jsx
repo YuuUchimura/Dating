@@ -6,7 +6,16 @@ import Modal from "@mui/material/Modal";
 import { PostTextField } from "../../pages/molequres/PostTextField";
 import { IconButton } from "@mui/material";
 import { randomStr } from "../../utils/randomStr";
-import { addDoc, query, collection, serverTimestamp } from "firebase/firestore";
+import {
+  updateDoc,
+  addDoc,
+  query,
+  setDoc,
+  doc,
+  getDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -26,38 +35,39 @@ export const EditProfile = () => {
 
   const user = useContext(AuthContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    const DateRef = "user";
-    const ARef = collection(db, DateRef);
-    const q = query(ARef);
+    const UserRef = "user";
+    const ARef = doc(db, UserRef);
+    // const ARef = collection(db, UserRef);
+    // const q = query(ARef);
 
-    if (img) {
-      const randomChar = randomStr();
-      const fileName = randomChar + "_" + img.name;
-      const imageRef = `images/${fileName}`;
-      const uploadMsgImage = uploadBytesResumable(ref(storage, imageRef), img);
+    // if (img) {
+    //   const randomChar = randomStr();
+    //   const fileName = randomChar + "_" + img.name;
+    //   const imageRef = `images/${fileName}`;
+    //   const uploadMsgImage = uploadBytesResumable(ref(storage, imageRef), img);
 
-      uploadMsgImage.on(
-        "state_changed",
-        () => {},
-        (err) => {
-          alert(err.message);
-        },
-        async () => {
-          await getDownloadURL(ref(storage, imageRef)).then(async (url) => {
-            addDoc(ARef, {
+    //   uploadMsgImage.on(
+    //     "state_changed",
+    //     () => {},
+    //     (err) => {
+    //       alert(err.message);
+    //     },
+    //     async () => {
+    //       await getDownloadURL(ref(storage, imageRef)).then(async (url) => {
+            await setDoc(ARef, {
               user: user.displayName,
               userid: user.uid,
               name: name,
-              img: url,
+              // img: url,
               selfIntroduction: selfIntroduction,
               timeStamp: serverTimestamp(),
             });
-          });
-        }
-      );
-    }
+    //       });
+    //     }
+    //   );
+    // }
     setImg("");
     setName("");
     setSex("");

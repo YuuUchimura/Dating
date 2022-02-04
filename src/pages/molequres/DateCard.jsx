@@ -28,6 +28,7 @@ const MediaStyle = {
   width: "345px",
 };
 
+
 export const DateCard = ({ plan }) => {
   const [expanded, setExpanded] = useState(false);
   const [sellectAddresses, setSellectAddresses] = useState(plan.addresses);
@@ -55,6 +56,12 @@ export const DateCard = ({ plan }) => {
   };
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+  const handleApiLoaded = ({ map, maps }) => {
+    new maps.Marker({
+      map,
+      position: currentAddress.location,
+    });
   };
 
   return (
@@ -84,6 +91,7 @@ export const DateCard = ({ plan }) => {
               }}
               defaultCenter={currentAddress.location}
               defaultZoom={15}
+              onGoogleApiLoaded={handleApiLoaded}
             />
           </div>
         )}
@@ -102,7 +110,7 @@ export const DateCard = ({ plan }) => {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>{plan.comment}</Typography>
+            <Typography paragraph>{plan.description}</Typography>
           </CardContent>
         </Collapse>
       </Card>

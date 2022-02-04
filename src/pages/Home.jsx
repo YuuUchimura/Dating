@@ -7,7 +7,7 @@ import { query, onSnapshot, collection, orderBy } from "firebase/firestore";
 import { Post } from "./templates/post";
 import { Link } from "react-router-dom";
 import { DateCard } from "../pages/molequres/DateCard";
-
+import { Search } from "./molequres/Search";
 export const Home = () => {
   const [plans, setPlans] = useState([]);
 
@@ -26,6 +26,7 @@ export const Home = () => {
   return (
     <>
       <h1>Home</h1>
+      <Search />
       <Post />
       <ul className="mx-auto">
         {plans.map((plan) => {
