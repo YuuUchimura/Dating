@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../AuthService";
-import GoogleMapReact from "google-map-react";
 import { SearchAndMap1 } from "../molequres/SearchAndMap1";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -20,6 +19,7 @@ const CommentPlaceholder =
 export const Post = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [favorite, setFavorite] = useState(false);
   const [img, setImg] = useState("");
   const [route, setRoute] = useState("");
   const [addresses, setAddressees] = useState([
@@ -65,7 +65,8 @@ export const Post = () => {
               addresses: addresses,
               genre: genre,
               route: route,
-              descriptipon: description,
+              description: description,
+              favoreite: favorite,
               timeStamp: serverTimestamp(),
             });
           });
@@ -87,6 +88,15 @@ export const Post = () => {
 
   const buttonStyle = {
     backgroundColor: "#ff00ff",
+    "&:hover": {
+      backgroundColor: "#ff00ff",
+      opacity: 0.8,
+    },
+  };
+  const postButtonStyle = {
+    padding: "10px 30px",
+    backgroundColor: "#ff00ff",
+    color: "#fff",
     "&:hover": {
       backgroundColor: "#ff00ff",
       opacity: 0.8,
@@ -133,7 +143,11 @@ export const Post = () => {
 
   return (
     <div>
-      <Button onClick={handleOpen}>投稿</Button>
+      <div className="text-2xl">
+        <Button sx={postButtonStyle} onClick={handleOpen}>
+          投稿
+        </Button>
+      </div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -176,7 +190,7 @@ export const Post = () => {
             </div>
             {addresses.map((address, index) => {
               return (
-                <>
+                <div key={index}>
                   <SearchAndMap1
                     label={`デートスポット${index + 1}`}
                     setAddress={setAddress(index)}
@@ -193,7 +207,7 @@ export const Post = () => {
                       onChange={(e) => setRoute(e.target.value)}
                     />
                   </div>
-                </>
+                </div>
               );
             })}
             <div className="my-5">

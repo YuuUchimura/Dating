@@ -6,16 +6,7 @@ import Modal from "@mui/material/Modal";
 import { PostTextField } from "../../pages/molequres/PostTextField";
 import { IconButton } from "@mui/material";
 import { randomStr } from "../../utils/randomStr";
-import {
-  updateDoc,
-  addDoc,
-  query,
-  setDoc,
-  doc,
-  getDoc,
-  collection,
-  serverTimestamp,
-} from "firebase/firestore";
+import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -39,8 +30,6 @@ export const EditProfile = () => {
     e.preventDefault();
     const UserRef = "user";
     const ARef = doc(db, UserRef, user.uid);
-    // const ARef = collection(db, UserRef);
-    // const q = query(ARef);
 
     if (img) {
       const randomChar = randomStr();
@@ -71,12 +60,6 @@ export const EditProfile = () => {
         }
       );
     }
-    setImg("");
-    setName("");
-    setSex("");
-    setAge("");
-    setAddress("");
-    setSelfIntroduction("");
     handleClose();
   };
 
@@ -120,7 +103,7 @@ export const EditProfile = () => {
   };
   return (
     <>
-      <Button onClick={handleOpen}>プロフィール</Button>
+      <Button onClick={handleOpen}>プロフィール編集</Button>
       <div>
         <Modal
           open={open}

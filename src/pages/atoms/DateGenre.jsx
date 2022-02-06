@@ -15,7 +15,6 @@ import Shopping from "../../images/shopping.jpg";
 export const DateGenre = ({ genre, setGenre }) => {
   return (
     <Autocomplete
-      // multiple
       id="tags-standard"
       options={DateGenres}
       getOptionLabel={(option) => option}

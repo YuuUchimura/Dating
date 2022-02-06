@@ -1,72 +1,115 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, Redirect } from "react-router-dom";
 import { auth } from "../config/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import { AuthContext } from "../AuthService";
 
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const user = useContext(AuthContext);
+
+  if (user) {
+    return <Redirect to="/" />;
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        user.updateProfile({
+      .then(() => {
+        updateProfile(auth.currentUser, {
           displayName: name,
         });
       })
       .catch((err) => {
         console.log(err);
+        alert(
+          "登録出来ませんでした。もう一度よく確認してから登録をお願い致します。"
+        );
       });
   };
+
   return (
-    <div>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input
+    <>
+      <Box
+        sx={{
+          paddingTop: 100,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          新規登録
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: 300,
+            marginBottom: 15,
+          }}
+        >
+          <TextField
+            margin="normal"
+            required
+            fullwidth="true"
+            variant="outlined"
+            label="Name"
             name="name"
-            type="name"
-            id="name"
-            placeholder="Name"
+            autoComplete="name"
+            autoFocus
             value={name}
             onChange={(e) => {
               setName(e.target.value);
             }}
           />
-        </div>
-        <div>
-          <label htmlFor="email">E-mail</label>
-          <input
+          <TextField
+            margin="normal"
+            required
+            fullwidth="true"
+            variant="outlined"
+            label="E-mail"
             name="email"
-            type="email"
-            id="email"
-            placeholder="Email"
+            autoComplete="email"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            name="password"
+          <TextField
             type="password"
-            id="password"
-            placeholder="Password"
+            margin="normal"
+            required
+            fullwidth="true"
+            variant="outlined"
+            label="Password(6文字以上)"
+            name="password"
+            autoComplete="password"
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
-        </div>
-        <button type="submit">Sign Up</button>
-      </form>
-      <Link to="/">top</Link>
-      <Link to="/login">login</Link>
-    </div>
+          <br />
+          <Button type="submit" variant="contained" color="secondary">
+            登録
+          </Button>
+        </Box>
+        <Link to="/login">ログイン画面へ</Link>
+        <Link to="/signincheck">サインチェック画面へ</Link>
+      </Box>
+    </>
   );
 };
 

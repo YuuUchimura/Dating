@@ -1,96 +1,90 @@
-import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../AuthService";
+import React, { useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../config/firebase";
 import { EditProfile } from "./templates/EditProfile";
-import {
-  query,
-  onSnapshot,
-  collection,
-  where,
-} from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { query, onSnapshot, collection, where } from "firebase/firestore";
+import { Link, useParams } from "react-router-dom";
+import { Container } from "./atoms/Container";
+import Dating from "../images/Dating-logo.png";
+import { MyPost } from "./Organisms/MyPost";
+import { useFetchMyPost } from "../hooks/useFetchMyPost";
+import { useFetchMyPostAddress } from "../hooks/useFetchMyPostAddress";
 
-export const Profile = () => {
-  const [rrr, setRrr] = useState([]);
+import Button from "@material-ui/core/Button";
+
+export const Profile = ({ user }) => {
+  const { id } = useParams(user);
+  const { fetchMyDate, currentPosts } = useFetchMyPost();
+  const { fetchMyDateAddress, myAddress } = useFetchMyPostAddress();
   const [currentUsers, setCurrentUsers] = useState([]);
-  const user = useContext(AuthContext);
+  const request = async () => {
+    await fetchMyDate({ id });
+    await fetchMyDateAddress({ id });
+  };
 
   useEffect(() => {
-    const q = query(
-      collection(db, "DatePlan"),
-      where("genre", "==", "ランチ")
-    );
-    const unSub = onSnapshot(q, (snapshot) => {
-      setRrr(
-        snapshot.docs.map(
-          (doc) =>
-            doc.data().title
-        )
-      );
-    });
-    return () => {
-      unSub();
-    };
+    request();
   }, []);
 
-  // const a = async () => {
-  //   const citiesRef = collection(db, "DatePlan");
-  //   const q = query(citiesRef, where("genre", "==", "ランチ"));
-  //   const querySnapshot = await getDocs(q);
-  //   // console.log(querySnapshot);
-  //   querySnapshot.forEach((doc) => {
-  //     // console.log(`${doc}`);
-  //     console.log("tanaka");
-  //     // console.log(`${doc.id}:${doc.data()}`);
-  //   });
-  // };
+  useEffect(() => {
+    const userRef = "user";
+    const URef = query(collection(db, userRef), where("user", "==", `${id}`));
+    const q = query(URef);
+    onSnapshot(q, (snapshot) => {
+      const currentUsers = snapshot.docs.map((doc) => {
+        return doc.data();
+      });
+      setCurrentUsers(currentUsers);
+    });
+  }, [id]);
 
   return (
-    <div className="w-10/12 mx-auto">
-      <div>{rrr}</div>
-      <header className="h-12 flex justify-between">
-        {/* <button onClick={a}>ぼたん</button> */}
-        <div>ロゴ</div>
-        {/* <img src="" alt="" /> */}
-        <div>
-          <button onClick={() => signOut(auth)}>ログアウト</button>
-        </div>
-      </header>
-      <main>
-        <EditProfile />
-        {currentUsers.map((currentUser) => {
-          // console.log(currentUser)
-          return (
-            <div className="h-48 flex items-center justify-between">
-              <div>
-                <div>
-                  {currentUser.name}
-                  {/* {console.log(currentUser.name)} */}
-                  {/* <img src="" alt="" /> */}
+    <Container>
+      <div className="w-10/12 mx-auto">
+        <header className="h-24 flex items-center justify-between">
+          <div>
+            <Link to="/">
+              <img width={150} src={Dating} alt="" />
+            </Link>
+          </div>
+          <div>
+            <Button onClick={() => signOut(auth)}>ログアウト</Button>
+          </div>
+        </header>
+        <main>
+          <EditProfile />
+          {currentUsers.map((currentUser, i) => {
+            return (
+              <div key={i} id={i} className="h-72 flex justify-around">
+                <div className="flex flex-col justify-around">
+                  <div>
+                    <img
+                      className="rounded-full h-48 w-48"
+                      src={currentUser.img}
+                      alt="MyAvater"
+                    />
+                  </div>
+                  <span>{currentUser.name}</span>
                 </div>
-                {/* <div>{user.displayName}</div> */}
-              </div>
-              <div className="leading-8">
-                {/* <div>
-                  <span>投稿数●件</span>
-                  <span>フォロー数●人</span>
-                  <span>フォロワー数●人</span>
-                </div> */}
-                <div>
-                  <h3>自己紹介</h3>
-                  <div>本文</div>
+                <div className="flex flex-col justify-around">
+                  <div>
+                    <div>{currentUser.selfIntroduction}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-        <div className="flex justify-around my-16 min-w-full border-black border-y">
-          <span className="border-black border-x px-5">投稿</span>
-          <span className="border-black border-x px-5">Dateしたい</span>
-        </div>
-      </main>
-      <Link to="/">top</Link>
-    </div>
+            );
+          })}
+          <div className="flex justify-around my-16 min-w-full border-black border-y">
+            <span className="border-black border-x px-5">投稿</span>
+            <span className="border-black border-x px-5">Dateしたい</span>
+          </div>
+          <MyPost
+            myAddress={myAddress}
+            currentPosts={currentPosts}
+            user={user}
+          />
+        </main>
+      </div>
+    </Container>
   );
 };

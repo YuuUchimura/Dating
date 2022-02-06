@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -9,9 +9,11 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -24,71 +26,69 @@ const ExpandMore = styled((props) => {
   }),
 }));
 const MediaStyle = {
-  height: "345px",
-  width: "345px",
+  backgroundColor: "#ffe0e0",
 };
 
-export const DateCard = ({ plan }) => {
+export const PostCard = ({ currentPost, i, myAddress }) => {
   const [expanded, setExpanded] = useState(false);
-  const [sellectAddresses, setSellectAddresses] = useState(plan.addresses);
   const [isOpenImage, setOpenIsImage] = useState(true);
-  const [currentAddress, setCurrentAddress] = useState(plan.addresses[0]);
+  const [currentAddress, setCurrentAdress] = useState(myAddress[0]?.addresses);
 
-  const changeViewMap = (id) => {
+  const changeViewMap = (addressId, id) => {
+    console.log(addressId);
+    console.log(myAddress);
     if (isOpenImage) {
       setOpenIsImage(!isOpenImage);
-      setCurrentAddress(sellectAddresses[id]);
+      setCurrentAdress(myAddress[id].addresses[addressId].location);
     } else {
-      if (currentAddress.id === id) {
-        setOpenIsImage(!isOpenImage);
-      } else {
-        setCurrentAddress(
-          sellectAddresses.find(
-            (sellectAddress) => () => {
-              console.log(sellectAddress.id);
-            }
-            // sellectAddress.id - 1 === id
-          )
-        );
-      }
+      setOpenIsImage(!isOpenImage);
     }
   };
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
   const handleApiLoaded = ({ map, maps }) => {
     new maps.Marker({
       map,
-      position: currentAddress.location,
+      position: currentAddress,
     });
   };
-
   return (
-    <div>
-      <Card sx={{ maxWidth: 345 }}>
+    <div className="my-10 w-6/12 shadow-xl">
+      <Card sx={MediaStyle}>
         <CardHeader
-          avatar={<Avatar sx={{ bgcolor: red[500] }}>R</Avatar>}
-          title={plan.title}
+          avatar={<Avatar sx={{ bgcolor: red[500] }}></Avatar>}
+          action={
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={currentPost.title}
+          sx={{ fontsize: "15px" }}
         />
-        {sellectAddresses.map((sellectAddress) => (
-          <div className="flex justify-around">
-            <span
-              key={sellectAddress.id}
-              onClick={() => changeViewMap(sellectAddress.id - 1)}
-            >
-              {sellectAddress.name}
-            </span>
-          </div>
-        ))}
+        <div className="flex justify-around">
+          {currentPost.addresses.map((item, b) => {
+            return (
+              <span
+                key={b}
+                onClick={() => changeViewMap(item.id - 1, i)}
+                className="mr-2"
+              >
+                {item.name}
+              </span>
+            );
+          })}
+        </div>
         {isOpenImage ? (
-          <CardMedia component="img" sx={MediaStyle} image={plan.img} />
+          <CardMedia component="img" image={currentPost.img} />
         ) : (
           <div style={{ height: "345px" }}>
             <GoogleMapReact
               bootstrapURLKeys={{
                 key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
               }}
-              defaultCenter={currentAddress.location}
+              defaultCenter={currentAddress}
               defaultZoom={15}
               onGoogleApiLoaded={handleApiLoaded}
             />
@@ -96,13 +96,13 @@ export const DateCard = ({ plan }) => {
         )}
         <CardContent>
           <div className="w-20 rounded-full bg-gray-200">
-            {/* {plan.genre.map((p) => {
-              <div className="w-20 rounded-full bg-gray-200">{p}</div>;
-            })} */}
-            {plan.genre}
+            {currentPost.genre}
           </div>
         </CardContent>
         <CardActions disableSpacing>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
@@ -114,7 +114,7 @@ export const DateCard = ({ plan }) => {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>{plan.description}</Typography>
+            <Typography paragraph>{currentPost.description}</Typography>
           </CardContent>
         </Collapse>
       </Card>
