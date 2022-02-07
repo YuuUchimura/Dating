@@ -1,7 +1,11 @@
 import { PostCard } from "./PostCard";
 
-
-export const MyPost = ({ user, currentPosts, myAddress }) => {
+export const MyPost = ({
+  user,
+  currentPosts,
+  myAddress,
+  deletePost,
+}) => {
   return (
     <>
       {currentPosts &&
@@ -13,6 +17,7 @@ export const MyPost = ({ user, currentPosts, myAddress }) => {
               key={i}
               i={i}
               myAddress={myAddress}
+              deletePost={deletePost}
             />
           );
         })}

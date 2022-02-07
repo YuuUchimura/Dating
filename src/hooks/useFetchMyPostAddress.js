@@ -1,6 +1,8 @@
-import { useState,  } from "react";
+import { useState } from "react";
 import { db } from "../config/firebase";
 import {
+  doc,
+  deleteDoc,
   query,
   onSnapshot,
   collection,
@@ -23,8 +25,13 @@ export const useFetchMyPostAddress = () => {
     }
   };
 
+  const deletePost = async (deleteId) => {
+    await deleteDoc(doc(db, "DatePlan", `${deleteId}`));
+  };
   return {
     fetchMyDateAddress,
     myAddress,
+    deletePost,
   };
 };
+  

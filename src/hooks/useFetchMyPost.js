@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { db } from "../config/firebase";
-import { query, onSnapshot, collection, where } from "firebase/firestore";
+import {
+  query,
+  onSnapshot,
+  collection,
+  where,
+} from "firebase/firestore";
 
 export const useFetchMyPost = () => {
   const [currentPosts, setCurrentPosts] = useState([]);
+  const [DeletePosts, setDeletePosts] = useState([]);
 
   const fetchMyDate = async ({ id }) => {
     const DateRef = "DatePlan";
-    const DRef = query(
-      collection(db, DateRef),
-      where("user", "==", `${id}`)
-    );
+    const DRef = query(collection(db, DateRef), where("user", "==", `${id}`));
     const q = query(DRef);
     try {
       onSnapshot(q, (snapshot) => {
@@ -24,5 +27,6 @@ export const useFetchMyPost = () => {
   return {
     fetchMyDate,
     currentPosts,
+    DeletePosts,
   };
 };

@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -29,14 +29,21 @@ const MediaStyle = {
   backgroundColor: "#ffe0e0",
 };
 
-export const PostCard = ({ currentPost, i, myAddress }) => {
+export const PostCard = ({
+  currentPost,
+  i,
+  myAddress,
+  deletePost,
+}) => {
   const [expanded, setExpanded] = useState(false);
   const [isOpenImage, setOpenIsImage] = useState(true);
   const [currentAddress, setCurrentAdress] = useState(myAddress[0]?.addresses);
 
+  const click = (q) => {
+    deletePost(q);
+  };
+
   const changeViewMap = (addressId, id) => {
-    console.log(addressId);
-    console.log(myAddress);
     if (isOpenImage) {
       setOpenIsImage(!isOpenImage);
       setCurrentAdress(myAddress[id].addresses[addressId].location);
@@ -54,6 +61,7 @@ export const PostCard = ({ currentPost, i, myAddress }) => {
       position: currentAddress,
     });
   };
+
   return (
     <div className="my-10 w-6/12 shadow-xl">
       <Card sx={MediaStyle}>
@@ -61,7 +69,7 @@ export const PostCard = ({ currentPost, i, myAddress }) => {
           avatar={<Avatar sx={{ bgcolor: red[500] }}></Avatar>}
           action={
             <IconButton aria-label="settings">
-              <MoreVertIcon />
+              <MoreVertIcon onClick={() => click(currentPost.id)} />
             </IconButton>
           }
           title={currentPost.title}

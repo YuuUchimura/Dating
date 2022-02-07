@@ -65,11 +65,6 @@ export const DateCard = ({ plan }) => {
         <Card sx={MediaStyle}>
           <CardHeader
             avatar={<Avatar sx={{ bgcolor: red[500] }}></Avatar>}
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
-            }
             title={plan.title}
             sx={{ fontsize: "15px" }}
           />

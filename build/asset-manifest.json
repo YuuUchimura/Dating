@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/Dating/static/css/main.cf1879f7.css",
-    "main.js": "/Dating/static/js/main.0fa64581.js",
-    "static/js/787.2c7b9aca.chunk.js": "/Dating/static/js/787.2c7b9aca.chunk.js",
-    "static/media/pool.jpg": "/Dating/static/media/pool.6f74d72966782991c65a.jpg",
-    "static/media/romantic.jpg": "/Dating/static/media/romantic.b447747adbd6349c8e10.jpg",
-    "static/media/parks.jpg": "/Dating/static/media/parks.54c52368a0dd9d4de163.jpg",
-    "static/media/gift.jpg": "/Dating/static/media/gift.0a2cd3946b14f0034ecd.jpg",
-    "static/media/relax.jpg": "/Dating/static/media/relax.657ea7f8c955b2d0395f.jpg",
-    "static/media/chocolate.jpg": "/Dating/static/media/chocolate.2acd70a2defa4b7375cc.jpg",
-    "static/media/Dating-logo.png": "/Dating/static/media/Dating-logo.2e7d7d12b884435e39ef.png",
-    "static/media/luxury.jpg": "/Dating/static/media/luxury.48cb22774e93f6a6a7b3.jpg",
-    "static/media/burgers.jpg": "/Dating/static/media/burgers.7e00d3a6eb1cb3a74bfe.jpg",
-    "static/media/cafe.jpg": "/Dating/static/media/cafe.cac7fef2ebba4d9aa37f.jpg",
-    "static/media/shopping.jpg": "/Dating/static/media/shopping.9a83d2d0c2b5d3785828.jpg",
-    "index.html": "/Dating/index.html",
-    "main.cf1879f7.css.map": "/Dating/static/css/main.cf1879f7.css.map",
-    "main.0fa64581.js.map": "/Dating/static/js/main.0fa64581.js.map",
-    "787.2c7b9aca.chunk.js.map": "/Dating/static/js/787.2c7b9aca.chunk.js.map"
+    "main.css": "./static/css/main.cf1879f7.css",
+    "main.js": "./static/js/main.b0ab6d93.js",
+    "static/js/787.2c7b9aca.chunk.js": "./static/js/787.2c7b9aca.chunk.js",
+    "static/media/pool.jpg": "./static/media/pool.6f74d72966782991c65a.jpg",
+    "static/media/romantic.jpg": "./static/media/romantic.b447747adbd6349c8e10.jpg",
+    "static/media/parks.jpg": "./static/media/parks.54c52368a0dd9d4de163.jpg",
+    "static/media/gift.jpg": "./static/media/gift.0a2cd3946b14f0034ecd.jpg",
+    "static/media/relax.jpg": "./static/media/relax.657ea7f8c955b2d0395f.jpg",
+    "static/media/chocolate.jpg": "./static/media/chocolate.2acd70a2defa4b7375cc.jpg",
+    "static/media/Dating-logo.png": "./static/media/Dating-logo.2e7d7d12b884435e39ef.png",
+    "static/media/luxury.jpg": "./static/media/luxury.48cb22774e93f6a6a7b3.jpg",
+    "static/media/burgers.jpg": "./static/media/burgers.7e00d3a6eb1cb3a74bfe.jpg",
+    "static/media/cafe.jpg": "./static/media/cafe.cac7fef2ebba4d9aa37f.jpg",
+    "static/media/shopping.jpg": "./static/media/shopping.9a83d2d0c2b5d3785828.jpg",
+    "index.html": "./index.html",
+    "main.cf1879f7.css.map": "./static/css/main.cf1879f7.css.map",
+    "main.b0ab6d93.js.map": "./static/js/main.b0ab6d93.js.map",
+    "787.2c7b9aca.chunk.js.map": "./static/js/787.2c7b9aca.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cf1879f7.css",
-    "static/js/main.0fa64581.js"
+    "static/js/main.b0ab6d93.js"
   ]
 }

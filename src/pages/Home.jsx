@@ -3,7 +3,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../AuthService";
 import { db, auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
-import { query, onSnapshot, collection, orderBy } from "firebase/firestore";
+import {
+  query,
+  onSnapshot,
+  collection,
+  orderBy,
+} from "firebase/firestore";
 import { Post } from "./templates/post";
 import { Link } from "react-router-dom";
 import { DateCard } from "../pages/Organisms/DateCard";
@@ -12,7 +17,6 @@ import { Search } from "./molequres/Search";
 import Button from "@mui/material/Button";
 import { Container } from "./atoms/Container";
 import Dating from "../images/Dating-logo.png";
-
 
 
 export const Home = () => {
@@ -30,6 +34,7 @@ export const Home = () => {
     });
   }, []);
 
+
   const user = useContext(AuthContext);
 
   return (
@@ -41,12 +46,12 @@ export const Home = () => {
               <img width={150} src={Dating} alt="" />
             </div>
             <div className="flex">
-                <Search
-                  squeeze={squeeze}
-                  setSqueeze={setSqueeze}
-                  values={values}
-                  setValues={setValues}
-                />
+              <Search
+                squeeze={squeeze}
+                setSqueeze={setSqueeze}
+                values={values}
+                setValues={setValues}
+              />
               <Button onClick={() => signOut(auth)}>ログアウト</Button>
             </div>
           </header>

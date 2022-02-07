@@ -8,10 +8,16 @@ import { PostTextField } from "../molequres/PostTextField";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { IconButton } from "@mui/material";
 import { randomStr } from "../../utils/randomStr";
-import { addDoc, query, collection, serverTimestamp } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  query,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 import { DateGenre } from "../atoms/DateGenre";
+import { nanoid } from "nanoid";
 
 const CommentPlaceholder =
   "詳細やおすすめのルート（裏道、食べ歩きスポット等）を記載してください";
@@ -37,10 +43,11 @@ export const Post = () => {
 
   const user = useContext(AuthContext);
 
+  const documentId = nanoid();
   const handleSubmit = (e) => {
     e.preventDefault();
     const DateRef = "DatePlan";
-    const ARef = collection(db, DateRef);
+    const ARef = doc(db, DateRef, documentId);
     const q = query(ARef);
 
     if (img) {
@@ -57,7 +64,7 @@ export const Post = () => {
         },
         async () => {
           await getDownloadURL(ref(storage, imageRef)).then(async (url) => {
-            addDoc(ARef, {
+            setDoc(ARef, {
               user: user.displayName,
               userid: user.uid,
               title: title,
@@ -68,6 +75,7 @@ export const Post = () => {
               description: description,
               favoreite: favorite,
               timeStamp: serverTimestamp(),
+              id: documentId,
             });
           });
         }

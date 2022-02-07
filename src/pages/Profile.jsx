@@ -14,8 +14,12 @@ import Button from "@material-ui/core/Button";
 
 export const Profile = ({ user }) => {
   const { id } = useParams(user);
-  const { fetchMyDate, currentPosts } = useFetchMyPost();
-  const { fetchMyDateAddress, myAddress } = useFetchMyPostAddress();
+  const { fetchMyDate, currentPosts, } = useFetchMyPost();
+  const {
+    fetchMyDateAddress,
+    myAddress,
+    deletePost,
+  } = useFetchMyPostAddress();
   const [currentUsers, setCurrentUsers] = useState([]);
   const request = async () => {
     await fetchMyDate({ id });
@@ -82,6 +86,7 @@ export const Profile = ({ user }) => {
             myAddress={myAddress}
             currentPosts={currentPosts}
             user={user}
+            deletePost={deletePost}
           />
         </main>
       </div>
