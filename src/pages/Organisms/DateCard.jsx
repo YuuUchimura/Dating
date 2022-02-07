@@ -13,7 +13,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -34,7 +33,6 @@ export const DateCard = ({ plan }) => {
   const [sellectAddresses, setSellectAddresses] = useState(plan.addresses);
   const [isOpenImage, setOpenIsImage] = useState(true);
   const [currentAddress, setCurrentAddress] = useState(plan.addresses[0]);
-  const [toogle, setToggle] = useState(false);
 
   const changeViewMap = (id) => {
     if (isOpenImage) {
@@ -54,9 +52,6 @@ export const DateCard = ({ plan }) => {
       map,
       position: currentAddress.location,
     });
-  };
-  const toggleF = () => {
-    setToggle(!toogle);
   };
 
   return (

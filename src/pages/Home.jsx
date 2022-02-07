@@ -3,12 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../AuthService";
 import { db, auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
-import {
-  query,
-  onSnapshot,
-  collection,
-  orderBy,
-} from "firebase/firestore";
+import { query, onSnapshot, collection, orderBy } from "firebase/firestore";
 import { Post } from "./templates/post";
 import { Link } from "react-router-dom";
 import { DateCard } from "../pages/Organisms/DateCard";
@@ -17,7 +12,7 @@ import { Search } from "./molequres/Search";
 import Button from "@mui/material/Button";
 import { Container } from "./atoms/Container";
 import Dating from "../images/Dating-logo.png";
-
+import { LogoutButton } from "./atoms/Logout";
 
 export const Home = () => {
   const [plans, setPlans] = useState([]);
@@ -33,7 +28,6 @@ export const Home = () => {
       setPlans(plans);
     });
   }, []);
-
 
   const user = useContext(AuthContext);
 
@@ -52,7 +46,7 @@ export const Home = () => {
                 values={values}
                 setValues={setValues}
               />
-              <Button onClick={() => signOut(auth)}>ログアウト</Button>
+              <LogoutButton />
             </div>
           </header>
         </div>

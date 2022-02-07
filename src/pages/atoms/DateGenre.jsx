@@ -7,7 +7,6 @@ import Cafe from "../../images/cafe.jpg";
 import Chocolate from "../../images/chocolate.jpg";
 import Luxury from "../../images/luxury.jpg";
 import Parks from "../../images/parks.jpg";
-import Pool from "../../images/pool.jpg";
 import Relax from "../../images/relax.jpg";
 import Romantic from "../../images/romantic.jpg";
 import Shopping from "../../images/shopping.jpg";

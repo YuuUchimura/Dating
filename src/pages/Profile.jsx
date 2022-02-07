@@ -9,8 +9,7 @@ import Dating from "../images/Dating-logo.png";
 import { MyPost } from "./Organisms/MyPost";
 import { useFetchMyPost } from "../hooks/useFetchMyPost";
 import { useFetchMyPostAddress } from "../hooks/useFetchMyPostAddress";
-
-import Button from "@material-ui/core/Button";
+import { LogoutButton } from "../pages/atoms/Logout";
 
 export const Profile = ({ user }) => {
   const { id } = useParams(user);
@@ -52,7 +51,7 @@ export const Profile = ({ user }) => {
             </Link>
           </div>
           <div>
-            <Button onClick={() => signOut(auth)}>ログアウト</Button>
+            <LogoutButton/>
           </div>
         </header>
         <main>

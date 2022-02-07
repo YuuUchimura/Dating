@@ -14,6 +14,9 @@ import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -29,12 +32,10 @@ const MediaStyle = {
   backgroundColor: "#ffe0e0",
 };
 
-export const PostCard = ({
-  currentPost,
-  i,
-  myAddress,
-  deletePost,
-}) => {
+export const PostCard = ({ currentPost, i, myAddress, deletePost }) => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [expanded, setExpanded] = useState(false);
   const [isOpenImage, setOpenIsImage] = useState(true);
   const [currentAddress, setCurrentAdress] = useState(myAddress[0]?.addresses);
@@ -42,6 +43,19 @@ export const PostCard = ({
   const click = (q) => {
     deletePost(q);
   };
+
+const style = {
+  display: "flex",
+  justifyContent: "cetnter",
+  alignItems: "center",
+  flexDirection: "column",
+  margin: "auto",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  width: "230px"
+};
 
   const changeViewMap = (addressId, id) => {
     if (isOpenImage) {
@@ -69,7 +83,25 @@ export const PostCard = ({
           avatar={<Avatar sx={{ bgcolor: red[500] }}></Avatar>}
           action={
             <IconButton aria-label="settings">
-              <MoreVertIcon onClick={() => click(currentPost.id)} />
+              <Button onClick={handleOpen}>
+                <MoreVertIcon />
+              </Button>
+              <Modal
+                open={open}
+                onClose={handleClose}
+              >
+                <Box sx={style}>
+                  <div className="flex flex-col">
+                  <div>投稿を削除しますか？</div>
+                  <div>
+
+                  <Button onClick={() => click(currentPost.id)}>
+                    削除
+                  </Button>
+                  </div>
+                  </div>
+                </Box>
+              </Modal>
             </IconButton>
           }
           title={currentPost.title}

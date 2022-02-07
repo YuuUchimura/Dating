@@ -32,6 +32,7 @@ export const Search = ({ squeeze, setSqueeze,  setValues }) => {
       });
       setValues(fPlan);
       setSqueeze(!squeeze);
+      handleClose()
     });
   };
 
