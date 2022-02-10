@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 
-const Login = ({ history }) => {
+export const Login = ({ history }) => {
   const user = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -96,5 +96,3 @@ const Login = ({ history }) => {
     </>
   );
 };
-
-export default Login;

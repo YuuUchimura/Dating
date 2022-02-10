@@ -1,45 +1,60 @@
-import React, { useState, useEffect } from "react";
-import { signOut } from "firebase/auth";
-import { auth, db } from "../config/firebase";
+import React, { useState, useEffect, useContext } from "react";
+import { db } from "../config/firebase";
 import { EditProfile } from "./templates/EditProfile";
-import { query, onSnapshot, collection, where } from "firebase/firestore";
+import { doc, query, onSnapshot } from "firebase/firestore";
 import { Link, useParams } from "react-router-dom";
 import { Container } from "./atoms/Container";
 import Dating from "../images/Dating-logo.png";
-import { MyPost } from "./Organisms/MyPost";
+import { MyPosts } from "./Organisms/MyPosts";
 import { useFetchMyPost } from "../hooks/useFetchMyPost";
 import { useFetchMyPostAddress } from "../hooks/useFetchMyPostAddress";
 import { LogoutButton } from "../pages/atoms/Logout";
+import { AuthContext } from "../AuthService";
+import { FavoPostCard } from "./Organisms/FavoPostCard";
 
-export const Profile = ({ user }) => {
+export const Profile = () => {
+  const user = useContext(AuthContext);
   const { id } = useParams(user);
-  const { fetchMyDate, currentPosts, } = useFetchMyPost();
   const {
-    fetchMyDateAddress,
-    myAddress,
-    deletePost,
-  } = useFetchMyPostAddress();
-  const [currentUsers, setCurrentUsers] = useState([]);
+    fetchMyDate,
+    currentPosts,
+    getfavoPosts,
+    favoPosts,
+  } = useFetchMyPost();
+  const { fetchMyDateAddress, myAddress, deletePost } = useFetchMyPostAddress();
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isMyposts, setIsMyPosts] = useState(true);
+
+  const chageIsMyPosts = () => {
+    setIsMyPosts(!isMyposts);
+  };
+
   const request = async () => {
-    await fetchMyDate({ id });
+    const unSub = fetchMyDate({ id });
     await fetchMyDateAddress({ id });
+    await getfavoPosts();
+    return unSub;
   };
 
   useEffect(() => {
-    request();
-  }, []);
+    if (user) {
+      const unSub = request();
+      return unSub;
+    }
+  }, [user]);
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
     const userRef = "user";
-    const URef = query(collection(db, userRef), where("user", "==", `${id}`));
+    const URef = query(doc(db, userRef, id));
     const q = query(URef);
-    onSnapshot(q, (snapshot) => {
-      const currentUsers = snapshot.docs.map((doc) => {
-        return doc.data();
-      });
-      setCurrentUsers(currentUsers);
+    const unSub = onSnapshot(q, (doc) => {
+      setCurrentUser(doc.data());
     });
-  }, [id]);
+    return unSub;
+  }, [user]);
 
   return (
     <Container>
@@ -51,42 +66,62 @@ export const Profile = ({ user }) => {
             </Link>
           </div>
           <div>
-            <LogoutButton/>
+            <LogoutButton />
           </div>
         </header>
         <main>
-          <EditProfile />
-          {currentUsers.map((currentUser, i) => {
-            return (
-              <div key={i} id={i} className="h-72 flex justify-around">
-                <div className="flex flex-col justify-around">
-                  <div>
-                    <img
-                      className="rounded-full h-48 w-48"
-                      src={currentUser.img}
-                      alt="MyAvater"
-                    />
-                  </div>
-                  <span>{currentUser.name}</span>
-                </div>
-                <div className="flex flex-col justify-around">
-                  <div>
-                    <div>{currentUser.selfIntroduction}</div>
-                  </div>
-                </div>
+          {user.uid === id ? <EditProfile /> : null}
+          <div className="h-72 flex justify-around">
+            <div className="flex flex-col justify-around">
+              <div>
+                <img
+                  className="rounded-full h-48 w-48"
+                  src={currentUser?.img}
+                  alt="MyAvater"
+                />
               </div>
-            );
-          })}
+              <span>{currentUser?.name}</span>
+            </div>
+            <div className="flex flex-col justify-around">
+              <div>
+                <div>{currentUser?.selfIntroduction}</div>
+              </div>
+            </div>
+          </div>
           <div className="flex justify-around my-16 min-w-full border-black border-y">
             <span className="border-black border-x px-5">投稿</span>
-            <span className="border-black border-x px-5">Dateしたい</span>
+            <span
+              className="border-black border-x px-5"
+              onClick={() => {
+                chageIsMyPosts();
+              }}
+            >
+              Dateしたい
+            </span>
           </div>
-          <MyPost
-            myAddress={myAddress}
-            currentPosts={currentPosts}
-            user={user}
-            deletePost={deletePost}
-          />
+          {isMyposts ? (
+            <MyPosts
+              myAddress={myAddress}
+              currentPosts={currentPosts}
+              user={user}
+              deletePost={deletePost}
+            />
+          ) : (
+            <div>
+              {favoPosts.map((favoPost, i) => {
+                // console.log(favoPost)
+                return (
+                  <FavoPostCard
+                    myAddress={myAddress}
+                    favoPost={favoPost}
+                    user={user}
+                    key={i}
+                    i={i}
+                  />
+                );
+              })}
+            </div>
+          )}
         </main>
       </div>
     </Container>

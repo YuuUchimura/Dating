@@ -1,17 +1,12 @@
-import { PostCard } from "./PostCard";
+import { MyPostCard } from "./MyPostCard";
 
-export const MyPost = ({
-  user,
-  currentPosts,
-  myAddress,
-  deletePost,
-}) => {
+export const MyPosts = ({ user, currentPosts, myAddress, deletePost }) => {
   return (
     <>
       {currentPosts &&
         currentPosts.map((currentPost, i) => {
           return (
-            <PostCard
+            <MyPostCard
               user={user}
               currentPost={currentPost}
               key={i}

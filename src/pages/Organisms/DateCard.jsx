@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -7,12 +8,20 @@ import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
+import { pink, red } from "@mui/material/colors";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
+import {
+  setDoc,
+  doc,
+  increment,
+  deleteDoc,
+  getDoc,
+} from "firebase/firestore";
+import { db } from "../../config/firebase";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -26,13 +35,59 @@ const ExpandMore = styled((props) => {
 }));
 const MediaStyle = {
   backgroundColor: "#ffe0e0",
+  width: "500px",
 };
 
-export const DateCard = ({ plan }) => {
+export const DateCard = ({ user, post, }) => {
   const [expanded, setExpanded] = useState(false);
-  const [sellectAddresses, setSellectAddresses] = useState(plan.addresses);
+  const [sellectAddresses, setSellectAddresses] = useState(post.addresses);
   const [isOpenImage, setOpenIsImage] = useState(true);
-  const [currentAddress, setCurrentAddress] = useState(plan.addresses[0]);
+  const [currentAddress, setCurrentAddress] = useState(post.addresses[0]);
+  const [favorite, setFavorite] = useState(false);
+
+  const getFavoId = async () => {
+    const FavoRef = doc(db, "user", user.uid, "favoPlans", post.id);
+    const docSnap = await getDoc(FavoRef);
+    if (docSnap.exists()) {
+      setFavorite(true);
+    } else {
+      setFavorite(false);
+    }
+  };
+  useEffect(() => {
+    getFavoId();
+  }, []);
+
+  const favo = (post) => {
+    if (favorite) {
+      deleteDoc(doc(db, `user/${user.uid}/favoPlans/${post.id}`));
+      setDoc(
+        doc(db, `DatePlan/${post.id}`),
+        {
+          favoTimes: increment(-1),
+          favoUsers: post.favoUsers?.filter(( uid ) => {
+            return uid !== user.uid;
+          }),
+        },
+        { merge: true }
+      );
+    } else {
+      setDoc(doc(db, `user/${user.uid}/favoPlans/${post.id}`), {
+        createdTime: new Date(),
+      });
+      setDoc(
+        doc(db, `DatePlan/${post.id}`),
+        {
+          favoTimes: increment(1),
+          favoUsers: post.favoUsers
+            ? [...post.favoUsers, user.uid]
+            : [user.uid],
+        },
+        { merge: true }
+      );
+    }
+    setFavorite(!favorite);
+  };
 
   const changeViewMap = (id) => {
     if (isOpenImage) {
@@ -53,31 +108,41 @@ export const DateCard = ({ plan }) => {
       position: currentAddress.location,
     });
   };
+  const imageStyle = {
+    borderRadius: "50%",
+  };
 
   return (
     <>
       <div className="my-10 w-6/12 shadow-xl">
         <Card sx={MediaStyle}>
           <CardHeader
-            avatar={<Avatar sx={{ bgcolor: red[500] }}></Avatar>}
-            title={plan.title}
-            sx={{ fontsize: "15px" }}
+            avatar={
+              <Link to={`/profile/${post.userid}`}>
+                <Avatar sx={{ bgcolor: pink[200] }}></Avatar>
+              </Link>
+            }
+            title={<h1 className="flex text-xl">{post.title}</h1>}
           />
-          {sellectAddresses.map((sellectAddress, i) => (
-            <div key={i} className="flex justify-around">
-              <span
-                className="flex"
+          <div className="text-sm flex justify-around">
+            {sellectAddresses.map((sellectAddress, i) => (
+              <div
                 id={i}
                 onClick={() => changeViewMap(sellectAddress.id - 1)}
+                key={i}
               >
                 {sellectAddress.name}
-              </span>
-            </div>
-          ))}
+              </div>
+            ))}
+          </div>
           {isOpenImage ? (
-            <CardMedia component="img" image={plan.img} />
+            <CardMedia
+              style={{ height: "300px" }}
+              component="img"
+              image={post.img}
+            />
           ) : (
-            <div style={{ height: "345px" }}>
+            <div style={{ height: "300px" }}>
               <GoogleMapReact
                 bootstrapURLKeys={{
                   key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -89,12 +154,23 @@ export const DateCard = ({ plan }) => {
             </div>
           )}
           <CardContent>
-            <div className="w-20 rounded-full bg-gray-200">{plan.genre}</div>
+            <div className="w-20 rounded-full bg-gray-200">{post.genre}</div>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
-            </IconButton>
+            {favorite ? (
+              <FavoriteIcon
+                onClick={() => {
+                  favo(post);
+                }}
+                sx={{ color: red[500] }}
+              />
+            ) : (
+              <FavoriteIcon
+                onClick={() => {
+                  favo(post);
+                }}
+              />
+            )}
             <ExpandMore
               expand={expanded}
               onClick={handleExpandClick}
@@ -106,7 +182,7 @@ export const DateCard = ({ plan }) => {
           </CardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography paragraph>{plan.description}</Typography>
+              <Typography paragraph>{post.description}</Typography>
             </CardContent>
           </Collapse>
         </Card>

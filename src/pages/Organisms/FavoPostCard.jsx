@@ -17,6 +17,19 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
+import { db } from "../../config/firebase";
+import {
+  setDoc,
+  doc,
+  increment,
+  deleteDoc,
+  query,
+  onSnapshot,
+  collection,
+  getDocs,
+  getDoc,
+  where,
+} from "firebase/firestore";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,40 +44,71 @@ const ExpandMore = styled((props) => {
 const MediaStyle = {
   backgroundColor: "#ffe0e0",
 };
-
-export const PostCard = ({ currentPost, i, myAddress, deletePost }) => {
+//プロフィールページの投稿
+export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const [expanded, setExpanded] = useState(false);
   const [isOpenImage, setOpenIsImage] = useState(true);
-  const [currentAddress, setCurrentAdress] = useState(myAddress[0]?.addresses);
+  const [favoAddress, setFavoAddress] = useState(myAddress[0]?.addresses);
+  const [favorite, setFavorite] = useState(
+    favoPost.favoUsers ? favoPost.favoUsers.includes(user.uid) : false
+  );
 
-  const click = (q) => {
-    deletePost(q);
+  // console.log(favoPost.title);
+
+  const favo = () => {
+    if (favorite) {
+      deleteDoc(doc(db, `user/${user.uid}/favoPlans/${favoPost.id}`));
+      setDoc(
+        doc(db, `DatePlan/${favoPost.id}`),
+        {
+          favoTimes: increment(-1),
+          favoUsers: favoPost.favoUsers?.filter((uid) => {
+            return uid !== user.uid;
+          }),
+        },
+        { merge: true }
+      );
+    } else {
+      setDoc(doc(db, `user/${user.uid}/favoPlans/${favoPost.id}`), {
+        createdTime: new Date(),
+      });
+      setDoc(
+        doc(db, `DatePlan/${favoPost.id}`),
+        {
+          favoTimes: increment(1),
+          favoUsers: favoPost.favoUsers
+            ? [...favoPost.favoUsers, user.uid]
+            : [user.uid],
+        },
+        { merge: true }
+      );
+    }
+    setFavorite(!favorite);
   };
 
-const style = {
-  display: "flex",
-  justifyContent: "cetnter",
-  alignItems: "center",
-  flexDirection: "column",
-  margin: "auto",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  width: "230px"
-};
+  const style = {
+    display: "flex",
+    justifyContent: "cetnter",
+    alignItems: "center",
+    flexDirection: "column",
+    margin: "auto",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    width: "230px",
+  };
 
   const changeViewMap = (addressId, id) => {
     if (isOpenImage) {
       setOpenIsImage(!isOpenImage);
-      setCurrentAdress(myAddress[id].addresses[addressId].location);
+      setFavoAddress(myAddress[id].addresses[addressId].location);
     } else {
       setOpenIsImage(!isOpenImage);
     }
   };
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -72,43 +116,20 @@ const style = {
   const handleApiLoaded = ({ map, maps }) => {
     new maps.Marker({
       map,
-      position: currentAddress,
+      position: favoAddress,
     });
   };
 
   return (
-    <div className="my-10 w-6/12 shadow-xl">
+    <div key={i} className="my-10 w-6/12 shadow-xl">
       <Card sx={MediaStyle}>
         <CardHeader
           avatar={<Avatar sx={{ bgcolor: red[500] }}></Avatar>}
-          action={
-            <IconButton aria-label="settings">
-              <Button onClick={handleOpen}>
-                <MoreVertIcon />
-              </Button>
-              <Modal
-                open={open}
-                onClose={handleClose}
-              >
-                <Box sx={style}>
-                  <div className="flex flex-col">
-                  <div>投稿を削除しますか？</div>
-                  <div>
-
-                  <Button onClick={() => click(currentPost.id)}>
-                    削除
-                  </Button>
-                  </div>
-                  </div>
-                </Box>
-              </Modal>
-            </IconButton>
-          }
-          title={currentPost.title}
+          title={favoPost.title}
           sx={{ fontsize: "15px" }}
         />
         <div className="flex justify-around">
-          {currentPost.addresses.map((item, b) => {
+          {favoPost.addresses.map((item, b) => {
             return (
               <span
                 key={b}
@@ -121,28 +142,37 @@ const style = {
           })}
         </div>
         {isOpenImage ? (
-          <CardMedia component="img" image={currentPost.img} />
+          <CardMedia component="img" image={favoPost.img} />
         ) : (
           <div style={{ height: "345px" }}>
             <GoogleMapReact
               bootstrapURLKeys={{
                 key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
               }}
-              defaultCenter={currentAddress}
+              defaultCenter={favoAddress}
               defaultZoom={15}
               onGoogleApiLoaded={handleApiLoaded}
             />
           </div>
         )}
         <CardContent>
-          <div className="w-20 rounded-full bg-gray-200">
-            {currentPost.genre}
-          </div>
+          <div className="w-20 rounded-full bg-gray-200">{favoPost.genre}</div>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
+          {favorite ? (
+            <FavoriteIcon
+              onClick={() => {
+                favo();
+              }}
+              sx={{ color: red[500] }}
+            />
+          ) : (
+            <FavoriteIcon
+              onClick={() => {
+                favo();
+              }}
+            />
+          )}
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
@@ -154,7 +184,7 @@ const style = {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>{currentPost.description}</Typography>
+            <Typography paragraph>{favoPost.description}</Typography>
           </CardContent>
         </Collapse>
       </Card>

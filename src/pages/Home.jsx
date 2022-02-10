@@ -1,35 +1,36 @@
 //components
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../AuthService";
-import { db, auth } from "../config/firebase";
-import { signOut } from "firebase/auth";
-import { query, onSnapshot, collection, orderBy } from "firebase/firestore";
 import { Post } from "./templates/post";
 import { Link } from "react-router-dom";
 import { DateCard } from "../pages/Organisms/DateCard";
-import { SqueezeDateCard } from "../pages/Organisms/SqueezeDateCard";
+import { ChoiceDateCard } from "./Organisms/ChoiceDateCard";
 import { Search } from "./molequres/Search";
-import Button from "@mui/material/Button";
 import { Container } from "./atoms/Container";
 import Dating from "../images/Dating-logo.png";
 import { LogoutButton } from "./atoms/Logout";
+import { useFetchUser } from "../hooks/useFetchUser";
+import { useFetchDatePlan } from "../hooks/useFetchDatePlan";
 
 export const Home = () => {
-  const [plans, setPlans] = useState([]);
-  const [values, setValues] = useState([]);
-  const [squeeze, setSqueeze] = useState(true);
-
-  useEffect(() => {
-    const q = query(collection(db, "DatePlan"), orderBy("timeStamp", "desc"));
-    onSnapshot(q, (snapshot) => {
-      const plans = snapshot.docs.map((doc) => {
-        return doc.data();
-      });
-      setPlans(plans);
-    });
-  }, []);
-
   const user = useContext(AuthContext);
+  const [choiceValues, setChoiceValues] = useState([]);
+  const [choice, setChoice] = useState(true);
+  const { fetchDatingUser, fetchPostUser, fetchLoginUser } = useFetchUser({
+    user,
+  });
+  const { fetchDatePlan, posts } = useFetchDatePlan();
+
+  const request = async () => {
+    await fetchDatingUser();
+    await fetchPostUser({ user });
+    await fetchLoginUser();
+    await fetchDatePlan();
+    
+  };
+  useEffect(() => {
+    request();
+  }, []);
 
   return (
     <>
@@ -41,10 +42,9 @@ export const Home = () => {
             </div>
             <div className="flex">
               <Search
-                squeeze={squeeze}
-                setSqueeze={setSqueeze}
-                values={values}
-                setValues={setValues}
+                choice={choice}
+                setChoice={setChoice}
+                setChoiceValues={setChoiceValues}
               />
               <LogoutButton />
             </div>
@@ -56,17 +56,17 @@ export const Home = () => {
         <div className="w-9/12 mx-auto">
           <div className="flex">
             <div>
-              <Link to={`/profile/${user.displayName}`}>Profile</Link>
-              {squeeze ? (
+              <Link to={`/profile/${user.uid}`}>Profile</Link>
+              {choice ? (
                 <ul className="mx-auto">
-                  {plans.map((plan, i) => {
-                    return <DateCard key={i} id={i} plan={plan} />;
+                  {posts.map((post, i) => {
+                    return <DateCard user={user} key={i} post={post} />;
                   })}
                 </ul>
               ) : (
                 <ul className="mx-auto">
-                  {values.map((value, i) => {
-                    return <SqueezeDateCard key={i} id={i} value={value} />;
+                  {choiceValues.map((choiceValue, i) => {
+                    return <ChoiceDateCard key={i} choiceValue={choiceValue} />;
                   })}
                 </ul>
               )}

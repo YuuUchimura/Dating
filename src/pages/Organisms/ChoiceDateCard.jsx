@@ -28,38 +28,30 @@ const MediaStyle = {
   width: "345px",
 };
 
-export const SqueezeDateCard = ({ value }) => {
+export const ChoiceDateCard = ({ choiceValue }) => {
   const [expanded, setExpanded] = useState(false);
-  const [sellectAddresses, setSellectAddresses] = useState(value.addresses);
+  const [changeViewMaps, setChangeViewMaps] = useState(choiceValue.addresses);
   const [isOpenImage, setOpenIsImage] = useState(true);
-  const [currentAddress, setCurrentAddress] = useState(value.addresses[0]);
+  const [currentSellectAddress, setCurrentSellectAddress] = useState(
+    choiceValue.addresses[0]
+  );
 
   const changeViewMap = (id) => {
     if (isOpenImage) {
       setOpenIsImage(!isOpenImage);
-      setCurrentAddress(sellectAddresses[id]);
+      setCurrentSellectAddress(changeViewMaps[id]);
     } else {
-      if (currentAddress.id === id) {
-        setOpenIsImage(!isOpenImage);
-      } else {
-        setCurrentAddress(
-          sellectAddresses.find(
-            (sellectAddress) => () => {
-              console.log(sellectAddress.id);
-            }
-          )
-        );
-      }
+      setOpenIsImage(!isOpenImage);
     }
   };
-  
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
   const handleApiLoaded = ({ map, maps }) => {
     new maps.Marker({
       map,
-      position: currentAddress.location,
+      position: currentSellectAddress.location,
     });
   };
 
@@ -68,28 +60,24 @@ export const SqueezeDateCard = ({ value }) => {
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
           avatar={<Avatar sx={{ bgcolor: red[500] }}>R</Avatar>}
-          title={value.title}
+          title={choiceValue.title}
         />
-        {sellectAddresses.map((sellectAddress, i) => (
+        {changeViewMaps.map((sellectAddress, i) => (
           <div className="flex justify-around">
-            <span
-              id={i}
-              key={sellectAddress.id}
-              onClick={() => changeViewMap(sellectAddress.id - 1)}
-            >
+            <span key={i} onClick={() => changeViewMap(sellectAddress.id - 1)}>
               {sellectAddress.name}
             </span>
           </div>
         ))}
         {isOpenImage ? (
-          <CardMedia component="img" sx={MediaStyle} image={value.img} />
+          <CardMedia component="img" sx={MediaStyle} image={choiceValue.img} />
         ) : (
           <div style={{ height: "345px" }}>
             <GoogleMapReact
               bootstrapURLKeys={{
                 key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
               }}
-              defaultCenter={currentAddress.location}
+              defaultCenter={currentSellectAddress.location}
               defaultZoom={15}
               onGoogleApiLoaded={handleApiLoaded}
             />
@@ -97,7 +85,7 @@ export const SqueezeDateCard = ({ value }) => {
         )}
         <CardContent>
           <div className="w-20 rounded-full bg-gray-200">
-            {value.genre}
+            {choiceValue.genre}
           </div>
         </CardContent>
         <CardActions disableSpacing>
@@ -112,7 +100,7 @@ export const SqueezeDateCard = ({ value }) => {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>{value.description}</Typography>
+            <Typography paragraph>{choiceValue.description}</Typography>
           </CardContent>
         </Collapse>
       </Card>

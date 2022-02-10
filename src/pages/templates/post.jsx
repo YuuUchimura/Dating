@@ -20,14 +20,12 @@ import { DateGenre } from "../atoms/DateGenre";
 import { nanoid } from "nanoid";
 
 const CommentPlaceholder =
-  "詳細やおすすめのルート（裏道、食べ歩きスポット等）を記載してください";
-
+  "デート詳細やおすすめのルート（裏道、食べ歩きスポット、交通手段、移動時間等）の記載をお願いします。";
 export const Post = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [favorite, setFavorite] = useState(false);
   const [img, setImg] = useState("");
-  const [route, setRoute] = useState("");
+  // const [route, setRoute] = useState("");
   const [addresses, setAddressees] = useState([
     { location: { lat: null, lng: null }, name: "", id: 1 },
     { location: { lat: null, lng: null }, name: "", id: 2 },
@@ -42,8 +40,8 @@ export const Post = () => {
   const handleClose = () => setOpen(false);
 
   const user = useContext(AuthContext);
-
   const documentId = nanoid();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const DateRef = "DatePlan";
@@ -71,9 +69,8 @@ export const Post = () => {
               img: url,
               addresses: addresses,
               genre: genre,
-              route: route,
+              // route: route,
               description: description,
-              favoreite: favorite,
               timeStamp: serverTimestamp(),
               id: documentId,
             });
@@ -89,7 +86,7 @@ export const Post = () => {
       { location: { lat: null, lng: null }, name: "", id: "" },
     ]);
     setGenre([]);
-    setRoute("");
+    // setRoute("");
     setDescription("");
     handleClose();
   };
@@ -205,7 +202,7 @@ export const Post = () => {
                     address={address}
                     id={index}
                   />
-                  <div className="my-5">
+                  {/* <div className="my-5">
                     <PostTextField
                       id={"time"}
                       label={`${index + 1}から${index + 2}の時間`}
@@ -214,7 +211,7 @@ export const Post = () => {
                       width={"13vh"}
                       onChange={(e) => setRoute(e.target.value)}
                     />
-                  </div>
+                  </div> */}
                 </div>
               );
             })}

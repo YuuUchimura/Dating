@@ -10,6 +10,7 @@ import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { documentId } from "./post";
 
 export const EditProfile = () => {
   const [name, setName] = useState("");

@@ -9,7 +9,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { AuthContext } from "../AuthService";
 
-const SignUp = () => {
+export const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -107,10 +107,7 @@ const SignUp = () => {
           </Button>
         </Box>
         <Link to="/login">ログイン画面へ</Link>
-        <Link to="/signincheck">サインチェック画面へ</Link>
       </Box>
     </>
   );
 };
-
-export default SignUp;
