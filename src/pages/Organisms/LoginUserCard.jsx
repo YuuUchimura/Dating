@@ -10,18 +10,14 @@ export const LoginUserCard = () => {
     user,
   });
 
-  // const request = async () => {
-  //   await fetchLoginUser();
-  // };
   useEffect(() => {
     (async () => {
       await fetchLoginUser();
     })();
-    // request();
   }, []);
 
   return (
-    <div className="invisible flex flex-col lg:visible lg:py-10 lg:fixed lg:top-80 lg:right-10 lg:w-1/4 rounded-lg bg-white">
+    <div className="invisible flex flex-col lg:visible lg:py-10 lg:fixed lg:top-96 lg:right-24 lg:w-1/4 rounded-lg bg-white">
       {loginUser?.map((LUser) => {
         return (
           <div>

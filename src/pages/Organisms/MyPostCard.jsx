@@ -103,7 +103,7 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
 
   return (
     <>
-      <div className="w-11/12 md:w-5/12 mx-auto my-10 text-xl">
+      <div className="font-Skia w-11/12 md:w-5/12 mx-auto my-10 text-xl">
         <div className="rounded-lg py-5 bg-white shadow-xl">
           <div className="flex justify-between items-center px-5">
             <div className="flex items-center">
@@ -173,7 +173,7 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
                     onClick={() => changeViewMap(item.id - 1, i)}
                     id={i}
                     key={i}
-                    className="cursor-pointer w-24 mx-auto"
+                    className="cursor-pointer mx-auto"
                   >
                     {item.name}
                   </div>
@@ -185,16 +185,16 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
                 </>
               ))}
             </div>
-              <ExpandMore onClick={handleExpandClick}>
-                <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
-                  どんなデートかみたい！
-                </p>
-              </ExpandMore>
+            <ExpandMore onClick={handleExpandClick}>
+              <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
+                どんなデートかみたい！
+              </p>
+            </ExpandMore>
             <Collapse in={expanded}>
-              <Typography paragraph>{currentPost.description}</Typography>
-              <Typography paragraph>
+              <p>{currentPost.description}</p>
+              <p>
                 移動のポイント：{currentPost.movePoint}
-              </Typography>
+              </p>
             </Collapse>
           </div>
         </div>

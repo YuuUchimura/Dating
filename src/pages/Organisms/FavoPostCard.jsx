@@ -92,7 +92,7 @@ export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
 
   return (
     <>
-      <div className="w-11/12 md:w-5/12 mx-auto my-10 text-xl">
+      <div className="font-Skia w-11/12 md:w-5/12 mx-auto my-10 text-xl">
         <div className="rounded-lg py-5 px-5 bg-white shadow-xl">
           <div className="flex items-center">
             <Link to={`/profile/${favoPost.userid}`}>
@@ -166,8 +166,8 @@ export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
             </p>
           </ExpandMore>
           <Collapse in={expanded}>
-            <Typography paragraph>{favoPost.description}</Typography>
-            <Typography paragraph>移動のポイント：{favo.movePoint}</Typography>
+            <p>{favoPost.description}</p>
+            <p>移動のポイント：{favo.movePoint}</p>
           </Collapse>
         </div>
       </div>

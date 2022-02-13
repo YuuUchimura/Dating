@@ -18,24 +18,12 @@ export const Home = () => {
   const user = useContext(AuthContext);
   const [choiceValues, setChoiceValues] = useState([]);
   const [choice, setChoice] = useState(true);
-  const {
-    // fetchDatingUser,
-    fetchPostUser,
-    fetchLoginUser,
-    loginUser,
-  } = useFetchUser({
+  const { fetchPostUser, fetchLoginUser, loginUser } = useFetchUser({
     user,
   });
   const { fetchDatePlan, posts } = useFetchDatePlan();
-  // const request = async () => {
-  //   await fetchDatingUser();
-  //   await fetchPostUser({ user });
-  //   await fetchLoginUser();
-  //   await fetchDatePlan();
-  // };
   useEffect(() => {
     (async () => {
-      // await fetchDatingUser();
       await fetchPostUser();
       await fetchLoginUser();
       await fetchDatePlan();
@@ -43,9 +31,9 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className="font-Comic">
+    <div className="font-Skia">
       <div className="bg-header-bg bg-cover shadow-lg">
-        <header className="w-10/12 md:w-9/12 h-28 md:h-48 flex items-center justify-between mx-auto">
+        <header className="w-10/12 md:w-9/12 h-28 md:h-36 flex items-center justify-between mx-auto">
           <Link to="/">
             <img width={300} src={Dating} alt="" />
           </Link>
@@ -66,7 +54,7 @@ export const Home = () => {
             setChoiceValues={setChoiceValues}
           />
         </div>
-        <h1 className="w-11/12 lg:w-8/12 my-10 mx-auto lg:mx-0 text-2xl md:text-4xl">
+        <h1 className="font-Skia md:my-10 w-11/12 lg:w-8/12 my-5 mx-auto lg:mx-0 text-2xl md:text-4xl">
           みんなの最高のデートプラン
         </h1>
         <div className="w-11/12 mx-auto lg:flex lg:w-8/12 lg:mx-0">
@@ -92,7 +80,7 @@ export const Home = () => {
             )}
           </div>
         </div>
-        <div className="fixed bottom-10 right-10 w-1/6 lg:w-1/4">
+        <div className="fixed bottom-10 right-10 lg:right-24 w-1/6 lg:w-1/4">
           <Post />
         </div>
       </Container>

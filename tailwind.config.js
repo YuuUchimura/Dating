@@ -3,8 +3,8 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
-      display: ["Impact", "Yu Gothic"],
       Comic: ["TsukuARdGothic-Regular"],
+      Skia: ["Skia-Regular_Black"],
     },
     extend: {
       backgroundImage: {

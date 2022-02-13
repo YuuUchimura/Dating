@@ -113,10 +113,10 @@ export const Post = () => {
     <div className="font-Comic">
       <div className="text-2xl">
         <Button
-          className="w-full hover:bg-pink-500 text-sm md:text-lg bg-pink-400 md:py-10 md:px-5 text-white"
+          className="font-Skia w-full font-semibold hover:bg-pink-500 text-sm md:text-xl lg:text-2xl bg-pink-400 md:py-10 md:px-5 text-white"
           onClick={handleOpen}
         >
-          POSTする !
+          POST!
         </Button>
       </div>
       <Modal
@@ -146,7 +146,11 @@ export const Post = () => {
               />
               {imageIsSelected ? (
                 <div className="flex justify-center items-center">
-                  <img width={200} src={prevAvatar.toString()} alt="PostImage" />
+                  <img
+                    width={200}
+                    src={prevAvatar.toString()}
+                    alt="PostImage"
+                  />
                 </div>
               ) : (
                 <>
@@ -199,7 +203,7 @@ export const Post = () => {
           </form>
           <div className="mb-5">
             <Button
-              className="hover:bg-pink-500 text-lg bg-pink-400 py-3 px-5 text-white"
+              className="font-Skia hover:bg-pink-500 text-lg bg-pink-400 py-3 px-5 text-white"
               variant="contained"
               onClick={handleSubmit}
             >

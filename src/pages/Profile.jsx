@@ -60,8 +60,8 @@ export const Profile = () => {
 
   return (
     <>
-      <div className="bg-header-bg bg-cover">
-        <header className="w-10/12 md:w-9/12 h-28 md:h-48 flex items-center justify-between mx-auto">
+      <div className="font-Skia bg-header-bg bg-cover">
+        <header className="w-10/12 md:w-9/12 h-28 md:h-36 flex items-center justify-between mx-auto">
           <div>
             <Link to="/">
               <img width={300} src={Dating} alt="" />
@@ -74,7 +74,7 @@ export const Profile = () => {
       </div>
       <Container>
         <div className="flex justify-around mx-auto w-10/12">
-          <div className="flex flex-col justify-around">
+          <div className="flex flex-col justify-between pt-5">
             <div>
               <img
                 className="rounded-full h-24 w-24 md:h-64 md:w-64 mx-auto"
@@ -87,24 +87,20 @@ export const Profile = () => {
             </span>
             {user.uid === id ? <EditProfile /> : null}
           </div>
-          <div className="my-auto pt-5 md:h-3/4 w-3/5 md:py-10 md:w-2/5 flex flex-col justify-around text-xl md:text-2xl lg:text-3xl rounded-lg bg-white">
+          <div className="my-auto pt-5 md:h-3/4 w-3/5 md:py-10 md:w-2/6 flex flex-col justify-around text-xl md:text-2xl lg:text-3xl rounded-lg bg-white">
             <div className="flex justify-around">
               <div>
-                <h2 className="mb-3 md:px-2 md:py-1 border-4 rounded-lg border-pink-300">
-                  sex
-                </h2>
-                <h3>{currentUser?.sex}</h3>
+                <h2 className="font-Skia mb-3">sex</h2>
+                <h3 className="text-xl md:text-2xl lg:text-3xl">
+                  {currentUser?.sex}
+                </h3>
               </div>
               <div>
-                <h2 className="mb-3 md:px-2 md:py-1 border-4 rounded-lg border-pink-300">
-                  age
-                </h2>
+                <h2 className="font-Skia mb-3 ">age</h2>
                 <h3>{currentUser?.age}</h3>
               </div>
               <div>
-                <h2 className="mb-3 md:px-2 md:py-1 border-4 rounded-lg border-pink-300">
-                  address
-                </h2>
+                <h2 className="font-Skia mb-3">address</h2>
                 <h3>{currentUser?.address}</h3>
               </div>
             </div>
@@ -116,7 +112,7 @@ export const Profile = () => {
         <div className="text-lg md:text-2xl lg:text-3xl my-8  bg-white border-y-4 border-pink-300">
           <div className="w-8/12 flex justify-between mx-auto">
             <span
-              className="cursor-pointer py-5 "
+              className="cursor-pointer py-5 font-Skia "
               onClick={() => {
                 chageIsMyPosts(true);
               }}
@@ -124,12 +120,12 @@ export const Profile = () => {
               My Post
             </span>
             <span
-              className="cursor-pointer py-5"
+              className="cursor-pointer py-5 font-Skia"
               onClick={() => {
                 chageIsMyPosts(false);
               }}
             >
-              Dateしたい!
+              Date したい!
               <FavoriteIcon sx={{ color: red[500] }} />
             </span>
           </div>

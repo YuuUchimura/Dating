@@ -104,7 +104,7 @@ export const DateCard = ({ user, post }) => {
 
   return (
     <>
-      <div className="w-11/12 md:w-5/12 mx-auto mb-10 text-xl ">
+      <div className="font-Skia w-11/12 md:w-5/12 mx-auto mb-10 text-xl ">
         <div className="rounded-lg py-5 px-5 w-full bg-white shadow-xl">
           <div className="flex items-center">
             <Link to={`/profile/${post.userid}`}>
