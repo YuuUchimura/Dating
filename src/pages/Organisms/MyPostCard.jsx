@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
@@ -42,6 +41,7 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
 
   const click = (q) => {
     deletePost(q);
+    handleClose()
   };
 
   const favo = (currentPost) => {
@@ -146,7 +146,7 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
               </div>
             )}
             <div className="flex justify-between">
-              <div className="p-1 w-24 rounded-full bg-gray-200">
+              <div className="p-1 w-32 rounded-full bg-gray-200">
                 {currentPost.genre}
               </div>
               <IconButton>
@@ -192,8 +192,12 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
             </ExpandMore>
             <Collapse in={expanded}>
               <p>{currentPost.description}</p>
+              <br/>
               <p>
-                移動のポイント：{currentPost.movePoint}
+                <span className="font-Skia rounded-full text-md bg-blue-400 m-0 px-1 py-1 text-white">
+                  移動のポイント
+                </span>
+                ：{currentPost.movePoint}
               </p>
             </Collapse>
           </div>

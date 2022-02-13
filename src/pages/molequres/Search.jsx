@@ -37,15 +37,15 @@ export const Search = ({ choice, setChoice, setChoiceValues }) => {
 
   return (
     <>
-      <Button
-        className="md:text-xl font-semibold lg:fixed lg:top-64 lg:right-24 lg:w-1/4 rounded-lg bg-white"
+      <div
+        className="border-4 border-blue-400 md:text-xl font-semibold lg:fixed lg:top-56 lg:right-24 lg:w-1/4 py-5 mt-5 md:mt-0 md:py-10 md:px-5 rounded-lg bg-white"
         onClick={handleOpen}
       >
         <div>
           デートジャンルからさがす
           <SearchIcon fontSize="large" />
         </div>
-      </Button>
+      </div>
       <div>
         <Modal
           open={open}

@@ -131,7 +131,7 @@ export const DateCard = ({ user, post }) => {
             </div>
           )}
           <div className="flex justify-between">
-            <div className="my-5 p-1 w-24 rounded-full bg-gray-200">
+            <div className="my-5 p-1 w-32 rounded-full bg-gray-200">
               {post.genre}
             </div>
             <IconButton>
@@ -179,7 +179,13 @@ export const DateCard = ({ user, post }) => {
           </ExpandMore>
           <Collapse in={expanded}>
             <p>{post.description}</p>
-            <p>移動のポイント：{post.movePoint}</p>
+            <br />
+            <p>
+              <span className="font-Skia rounded-full text-md bg-blue-400 m-0 px-1 py-1 text-white">
+                移動のポイント
+              </span>
+              ：{post.movePoint}
+            </p>
           </Collapse>
         </div>
       </div>

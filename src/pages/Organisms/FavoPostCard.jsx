@@ -119,7 +119,7 @@ export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
             </div>
           )}
           <div className="flex justify-between">
-            <div className="p-1 w-24 rounded-full bg-gray-200">
+            <div className="p-1 w-32 rounded-full bg-gray-200">
               {favoPost.genre}
             </div>
             <IconButton>
@@ -167,7 +167,13 @@ export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
           </ExpandMore>
           <Collapse in={expanded}>
             <p>{favoPost.description}</p>
-            <p>移動のポイント：{favo.movePoint}</p>
+            <br/>
+            <p>
+              <span className="font-Skia rounded-full text-md bg-blue-400 m-0 px-1 py-1 text-white">
+                移動のポイント：
+              </span>
+              {favo.movePoint}
+            </p>
           </Collapse>
         </div>
       </div>

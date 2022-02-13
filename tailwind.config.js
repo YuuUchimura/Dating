@@ -4,7 +4,11 @@ module.exports = {
   theme: {
     fontFamily: {
       Comic: ["TsukuARdGothic-Regular"],
-      Skia: ["Skia-Regular_Black"],
+      Skia: [
+        "Hiragino Kaku Gothic ProN",
+        "TsukuARdGothic - Regular",
+        "ＭＳ ゴシック",
+      ],
     },
     extend: {
       backgroundImage: {

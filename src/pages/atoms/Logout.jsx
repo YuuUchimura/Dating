@@ -11,7 +11,7 @@ export const LogoutButton = () => {
   const handleClose = () => setOpen(false);
   return (
     <>
-      <Button onClick={handleOpen}><LogoutIcon/></Button>
+      <Button className="m-0 p-0" onClick={handleOpen}><LogoutIcon/></Button>
       <Modal open={open} onClose={handleClose}>
         <div className="flex flex-col mx-auto rounded-md shadow-md items-center p-4 w-52 mt-36 bg-white border">
           <div>ログアウトしますか？</div>

@@ -13,6 +13,7 @@ import { AuthContext } from "../AuthService";
 import { FavoPostCard } from "./Organisms/FavoPostCard";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import Avatar from "@mui/material/Avatar";
 
 export const Profile = () => {
   const user = useContext(AuthContext);
@@ -76,11 +77,16 @@ export const Profile = () => {
         <div className="flex justify-around mx-auto w-10/12">
           <div className="flex flex-col justify-between pt-5">
             <div>
-              <img
+              <Avatar
                 className="rounded-full h-24 w-24 md:h-64 md:w-64 mx-auto"
                 src={currentUser?.img}
                 alt="MyAvater"
-              />
+              ></Avatar>
+              {/* <img
+                className="rounded-full h-24 w-24 md:h-64 md:w-64 mx-auto"
+                src={currentUser?.img}
+                alt="MyAvater"
+              /> */}
             </div>
             <span className="md:text-3xl py-5 md:py-10">
               {currentUser?.name}
@@ -130,7 +136,7 @@ export const Profile = () => {
             </span>
           </div>
         </div>
-        <div className="md:flex">
+        <div className="md:flex flex-wrap">
           {isMyposts ? (
             <MyPosts
               myAddress={myAddress}

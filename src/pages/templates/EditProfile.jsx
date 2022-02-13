@@ -105,7 +105,7 @@ export const EditProfile = () => {
                       />
                       <div className="flex justify-center">
                         {imageIsSelected ? (
-                          <img width={100} src={prevAvatar.toString()} alt="MyIcon" />
+                          <img width={100} height={100} src={prevAvatar.toString()} alt="MyIcon" />
                         ) : (
                           <div className="flex justify-center items-center flex-col">
                             <AccountCircleIcon fontSize={"large"} />

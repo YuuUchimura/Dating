@@ -118,7 +118,7 @@ export const ChoiceDateCard = ({ choiceValue, user }) => {
             </div>
           )}
           <div className="flex justify-between">
-            <div className="my-5 p-1 w-24 rounded-full bg-gray-200">
+            <div className="my-5 p-1 w-32 rounded-full bg-gray-200">
               {choiceValue.genre}
             </div>
             <IconButton>
@@ -167,7 +167,13 @@ export const ChoiceDateCard = ({ choiceValue, user }) => {
 
           <Collapse in={expanded}>
             <p>{choiceValue.description}</p>
-            <p>移動のポイント：{choiceValue.movePoint}</p>
+            <br/>
+            <p>
+              <span className="font-Skia rounded-full text-md bg-blue-400 m-0 px-1 py-1 text-white">
+                移動のポイント
+              </span>
+              <span>：{choiceValue.movePoint}</span>
+            </p>
           </Collapse>
         </div>
       </div>
