@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { red, pink } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
@@ -26,7 +25,6 @@ const ExpandMore = styled((props) => {
 }));
 //プロフィールページの投稿
 export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
-  const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [isOpenImage, setOpenIsImage] = useState(true);
   const [favoAddress, setFavoAddress] = useState(myAddress[0]?.addresses);
@@ -90,7 +88,7 @@ export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
     getUserIcon(favoPost.userid).then((data) => {
       setIcon(data);
     });
-  }, []);
+  }, [favoPost]);
 
   return (
     <>
@@ -106,6 +104,7 @@ export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
             <img
               className="my-5 h-72 flex justify-center mx-auto"
               src={favoPost.img}
+              alt="いいねした画像"
             />
           ) : (
             <div className="h-72 my-5">

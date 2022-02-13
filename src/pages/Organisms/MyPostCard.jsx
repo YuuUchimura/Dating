@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { red, pink } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
@@ -15,8 +14,8 @@ import Button from "@mui/material/Button";
 import { db } from "../../config/firebase";
 import { getUserIcon } from "../../utils/getUserIcon";
 import { setDoc, doc, increment, deleteDoc } from "firebase/firestore";
-
 import arrow from "../../images/arrow.png";
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -100,7 +99,7 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
     getUserIcon(currentPost.userid).then((data) => {
       setIcon(data);
     });
-  }, []);
+  }, [currentPost]);
 
   return (
     <>
@@ -132,6 +131,7 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
               <img
                 className="my-5 h-72 flex justify-center mx-auto"
                 src={currentPost.img}
+                alt="イメージ画像"
               />
             ) : (
               <div className="h-72 my-5">

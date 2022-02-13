@@ -19,7 +19,7 @@ export const Home = () => {
   const [choiceValues, setChoiceValues] = useState([]);
   const [choice, setChoice] = useState(true);
   const {
-    fetchDatingUser,
+    // fetchDatingUser,
     fetchPostUser,
     fetchLoginUser,
     loginUser,
@@ -27,14 +27,19 @@ export const Home = () => {
     user,
   });
   const { fetchDatePlan, posts } = useFetchDatePlan();
-  const request = async () => {
-    await fetchDatingUser();
-    await fetchPostUser({ user });
-    await fetchLoginUser();
-    await fetchDatePlan();
-  };
+  // const request = async () => {
+  //   await fetchDatingUser();
+  //   await fetchPostUser({ user });
+  //   await fetchLoginUser();
+  //   await fetchDatePlan();
+  // };
   useEffect(() => {
-    request();
+    (async () => {
+      // await fetchDatingUser();
+      await fetchPostUser();
+      await fetchLoginUser();
+      await fetchDatePlan();
+    })();
   }, []);
 
   return (
@@ -47,7 +52,7 @@ export const Home = () => {
           <div className="flex">
             <LogoutButton />
             <Link className="lg:invisible " to={`/profile/${user.uid}`}>
-              <Avatar src={loginUser[0]?.img} ></Avatar>
+              <Avatar src={loginUser[0]?.img}></Avatar>
             </Link>
           </div>
         </header>

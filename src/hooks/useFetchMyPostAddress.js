@@ -7,7 +7,6 @@ import {
   onSnapshot,
   collection,
   where,
-  getDoc
 } from "firebase/firestore";
 
 //ログインユーザーの地図の表示をいじる
@@ -26,7 +25,7 @@ export const useFetchMyPostAddress = () => {
       console.log(e);
     }
   };
-  
+
   const deletePost = async (deleteId) => {
     await deleteDoc(doc(db, "DatePlan", `${deleteId}`));
   };

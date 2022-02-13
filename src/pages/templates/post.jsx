@@ -146,7 +146,7 @@ export const Post = () => {
               />
               {imageIsSelected ? (
                 <div className="flex justify-center items-center">
-                  <img width={200} src={prevAvatar.toString()} />
+                  <img width={200} src={prevAvatar.toString()} alt="PostImage" />
                 </div>
               ) : (
                 <>

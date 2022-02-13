@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
-import { pink, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import { Link } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { setDoc, doc, increment, deleteDoc } from "firebase/firestore";
@@ -26,7 +25,7 @@ const ExpandMore = styled((props) => {
 
 export const ChoiceDateCard = ({ choiceValue, user }) => {
   const [expanded, setExpanded] = useState(false);
-  const [changeViewMaps, setChangeViewMaps] = useState(choiceValue.addresses);
+  const changeViewMaps = choiceValue.addresses;
   const [isOpenImage, setOpenIsImage] = useState(true);
   const [favorite, setFavorite] = useState(false);
   const [currentSellectAddress, setCurrentSellectAddress] = useState(
@@ -69,7 +68,7 @@ export const ChoiceDateCard = ({ choiceValue, user }) => {
     getUserIcon(choiceValue.userid).then((data) => {
       setIcon(data);
     });
-  }, []);
+  }, [choiceValue]);
 
   const changeViewMap = (id) => {
     if (isOpenImage) {
@@ -104,6 +103,7 @@ export const ChoiceDateCard = ({ choiceValue, user }) => {
             <img
               className="my-5 h-72 flex justify-center mx-auto"
               src={choiceValue.img}
+              alt="選択した画像"
             />
           ) : (
             <div className="h-72 my-5">

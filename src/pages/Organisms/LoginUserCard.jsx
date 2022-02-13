@@ -10,11 +10,14 @@ export const LoginUserCard = () => {
     user,
   });
 
-  const request = async () => {
-    await fetchLoginUser();
-  };
+  // const request = async () => {
+  //   await fetchLoginUser();
+  // };
   useEffect(() => {
-    request();
+    (async () => {
+      await fetchLoginUser();
+    })();
+    // request();
   }, []);
 
   return (

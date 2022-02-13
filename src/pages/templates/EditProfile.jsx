@@ -10,10 +10,6 @@ import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 
 export const EditProfile = () => {
   const user = useContext(AuthContext);
@@ -109,7 +105,7 @@ export const EditProfile = () => {
                       />
                       <div className="flex justify-center">
                         {imageIsSelected ? (
-                          <img width={100} src={prevAvatar.toString()} />
+                          <img width={100} src={prevAvatar.toString()} alt="MyIcon" />
                         ) : (
                           <div className="flex justify-center items-center flex-col">
                             <AccountCircleIcon fontSize={"large"} />

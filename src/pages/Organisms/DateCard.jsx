@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
-import { pink, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
@@ -25,21 +24,12 @@ const ExpandMore = styled((props) => {
 
 export const DateCard = ({ user, post }) => {
   const [expanded, setExpanded] = useState(false);
-  const [sellectAddresses, setSellectAddresses] = useState(post.addresses);
+  const sellectAddresses = post.addresses;
   const [isOpenImage, setOpenIsImage] = useState(true);
   const [currentAddress, setCurrentAddress] = useState(post.addresses[0]);
   const [favorite, setFavorite] = useState(false);
   const [icon, setIcon] = useState(null);
 
-  const getFavoId = async () => {
-    const FavoRef = doc(db, "user", user.uid, "favoPlans", post.id);
-    const docSnap = await getDoc(FavoRef);
-    if (docSnap.exists()) {
-      setFavorite(true);
-    } else {
-      setFavorite(false);
-    }
-  };
   const getUserIcon = async (userId) => {
     const user = await getDoc(doc(db, `user/${userId}`));
     return user.data().img;
@@ -49,8 +39,17 @@ export const DateCard = ({ user, post }) => {
     getUserIcon(post.userid).then((data) => {
       setIcon(data);
     });
+    const getFavoId = async () => {
+      const FavoRef = doc(db, "user", user.uid, "favoPlans", post.id);
+      const docSnap = await getDoc(FavoRef);
+      if (docSnap.exists()) {
+        setFavorite(true);
+      } else {
+        setFavorite(false);
+      }
+    };
     getFavoId();
-  }, []);
+  }, [post, user]);
 
   const favo = (post) => {
     if (favorite) {
@@ -117,6 +116,7 @@ export const DateCard = ({ user, post }) => {
             <img
               className="my-5 h-72 flex justify-center mx-auto"
               src={post.img}
+              alt="投稿画像"
             />
           ) : (
             <div className="h-72 my-5">
@@ -172,11 +172,11 @@ export const DateCard = ({ user, post }) => {
               </>
             ))}
           </div>
-            <ExpandMore onClick={handleExpandClick}>
-              <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
-                どんなデートかみたい！
-              </p>
-            </ExpandMore>
+          <ExpandMore onClick={handleExpandClick}>
+            <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
+              どんなデートかみたい！
+            </p>
+          </ExpandMore>
           <Collapse in={expanded}>
             <p>{post.description}</p>
             <p>移動のポイント：{post.movePoint}</p>
