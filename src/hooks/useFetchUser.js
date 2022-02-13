@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { db } from "../config/firebase";
-import { query, onSnapshot, collection, where } from "firebase/firestore";
+import {
+  query,
+  onSnapshot,
+  collection,
+  where,
+  getDoc,
+} from "firebase/firestore";
 
 //ログインユーザーの情報を取得する
-export const useFetchUser = ({user}) => {
+export const useFetchUser = ({ user }) => {
   //すべてのユーザーが入っている
   const [datingUser, setDatingUser] = useState([]);
   //loginUserにはログインしているユーザーの情報が入っている
@@ -45,6 +51,9 @@ export const useFetchUser = ({user}) => {
       console.log(e);
     }
   };
+
+
+
   return {
     datingUser,
     fetchDatingUser,

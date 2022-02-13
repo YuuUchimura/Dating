@@ -22,7 +22,7 @@ export const DateGenre = ({ genre, setGenre }) => {
         setGenre(value);
       }}
       renderInput={(params) => {
-        return <TextField {...params} variant="standard" label="ジャンル" />;
+        return <TextField {...params} variant="standard" label="デートのジャンル" />;
       }}
     />
   );

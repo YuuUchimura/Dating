@@ -12,15 +12,11 @@ export const PostTextField = ({
   multiline,
   placeholder,
   rows,
-  width = "30vw"
 }) => {
-  const textStyle = {
-    width: { width },
-  };
   return (
     <TextField
+      className="w-full"
       type={type}
-      sx={textStyle}
       required
       id={id}
       defaultValue={defaultValue}

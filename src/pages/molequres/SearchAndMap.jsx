@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import GoogleMapReact from "google-map-react";
 import Button from "@mui/material/Button";
-import { PostTextField } from "../molequres/PostTextField";
+import { PostTextField } from "./PostTextField";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-export const SearchAndMap1 = ({ setAddress, address, label, id }) => {
+export const SearchAndMap = ({ setAddress, address, label, id }) => {
   const [map, setMap] = useState(null);
   const [maps, setMaps] = useState(null);
   const [geocoder, setGeocoder] = useState(null);
@@ -49,16 +50,9 @@ export const SearchAndMap1 = ({ setAddress, address, label, id }) => {
       }
     );
   };
-
-  const buttonStyle = {
-    backgroundColor: "#ff00ff",
-    "&:hover": {
-      backgroundColor: "#ff00ff",
-      opacity: 0.8,
-    },
-  };
+  
   return (
-    <>
+    <div className="font-Comic my-5">
       <PostTextField
         label={label}
         value={address.name}
@@ -71,11 +65,15 @@ export const SearchAndMap1 = ({ setAddress, address, label, id }) => {
         }
       />
       <div className="text-right my-2">
-        <Button sx={buttonStyle} variant="contained" onClick={search}>
-          検索
+        <Button
+          className="hover:bg-pink-500 text-lg bg-pink-400 py-2 text-white"
+          variant="contained"
+          onClick={search}
+        >
+          さがす
         </Button>
       </div>
-      <div style={{ margin: "0 auto", height: "100px", width: "90%" }}>
+      <div style={{ height: "100px", width: "100%" }}>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -85,6 +83,9 @@ export const SearchAndMap1 = ({ setAddress, address, label, id }) => {
           onGoogleApiLoaded={handleApiLoaded}
         />
       </div>
-    </>
+      <div className="my-5">
+        <ArrowDownwardIcon className="text-pink-400" />
+      </div>
+    </div>
   );
 };

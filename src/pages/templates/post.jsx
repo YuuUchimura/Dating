@@ -1,26 +1,18 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../AuthService";
-import { SearchAndMap1 } from "../molequres/SearchAndMap1";
-import Box from "@mui/material/Box";
+import { SearchAndMap } from "../molequres/SearchAndMap";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { PostTextField } from "../molequres/PostTextField";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { IconButton } from "@mui/material";
 import { randomStr } from "../../utils/randomStr";
-import {
-  setDoc,
-  doc,
-  query,
-  serverTimestamp,
-} from "firebase/firestore";
+import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 import { DateGenre } from "../atoms/DateGenre";
 import { nanoid } from "nanoid";
 
-const CommentPlaceholder =
-  "デート詳細やおすすめのルート（裏道、食べ歩きスポット、交通手段、移動時間等）の記載をお願いします。";
+const CommentPlaceholder = "デートのおすすめポイントをおしえて！";
 export const Post = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -36,6 +28,7 @@ export const Post = () => {
   const [prevAvatar, setPrevAvatar] = useState("");
   const [open, setOpen] = React.useState(false);
   const [genre, setGenre] = useState([]);
+  const [movePoint, setMovePoint] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -46,7 +39,6 @@ export const Post = () => {
     e.preventDefault();
     const DateRef = "DatePlan";
     const ARef = doc(db, DateRef, documentId);
-    const q = query(ARef);
 
     if (img) {
       const randomChar = randomStr();
@@ -71,6 +63,7 @@ export const Post = () => {
               genre: genre,
               // route: route,
               description: description,
+              movePoint: movePoint,
               timeStamp: serverTimestamp(),
               id: documentId,
             });
@@ -91,36 +84,6 @@ export const Post = () => {
     handleClose();
   };
 
-  const buttonStyle = {
-    backgroundColor: "#ff00ff",
-    "&:hover": {
-      backgroundColor: "#ff00ff",
-      opacity: 0.8,
-    },
-  };
-  const postButtonStyle = {
-    padding: "10px 30px",
-    backgroundColor: "#ff00ff",
-    color: "#fff",
-    "&:hover": {
-      backgroundColor: "#ff00ff",
-      opacity: 0.8,
-    },
-  };
-
-  const style = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "cetnter",
-    alignItems: "center",
-    margin: "auto",
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    height: "90vh",
-    overflow: "scroll",
-    width: "50vw",
-  };
   const previewFile = (file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -147,10 +110,13 @@ export const Post = () => {
   };
 
   return (
-    <div>
+    <div className="font-Comic">
       <div className="text-2xl">
-        <Button sx={postButtonStyle} onClick={handleOpen}>
-          投稿
+        <Button
+          className="hover:bg-pink-500 text-lg bg-pink-400 py-5 px-5 text-white"
+          onClick={handleOpen}
+        >
+          デートプランをPOSTする !
         </Button>
       </div>
       <Modal
@@ -159,44 +125,41 @@ export const Post = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <div className="font-Comic overflow-scroll rounded-md shadow-md mt-3 h-3/4 flex flex-col justyfy-center items-center mx-auto bg-white border w-11/12 md:w-2/5 py-10 ">
           <h1 className="mt-5 text-2xl">デートプラン</h1>
           <form>
-            <div>
+            <div className="my-5">
               <PostTextField
-                label={"タイトル"}
+                label={"デートのタイトル"}
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
               />
             </div>
-            <div>
+            <div className="my-5">
               <DateGenre genre={genre} setGenre={setGenre} />
             </div>
-            <div>
-              <Box className="text-left">
-                <IconButton>
-                  <label>
-                    <input
-                      className="text-center hidden"
-                      type="file"
-                      onChange={onChangeImageHandler}
-                    />
-                    <div className="flex">
-                      {imageIsSelected ? (
-                        <img width={50} src={prevAvatar.toString()} />
-                      ) : (
-                        <AddPhotoAlternateIcon />
-                      )}
-                      プレビューで選択
-                    </div>
-                  </label>
-                </IconButton>
-              </Box>
-            </div>
+            <label>
+              <input
+                className="hidden"
+                type="file"
+                onChange={onChangeImageHandler}
+              />
+              {imageIsSelected ? (
+                <div className="flex justify-center items-center">
+                  <img width={200} src={prevAvatar.toString()} />
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-center items-center border p-24 text-3xl">
+                    <AddPhotoAlternateIcon fontSize="large" />
+                  </div>
+                </>
+              )}
+            </label>
             {addresses.map((address, index) => {
               return (
                 <div key={index}>
-                  <SearchAndMap1
+                  <SearchAndMap
                     label={`デートスポット${index + 1}`}
                     setAddress={setAddress(index)}
                     address={address}
@@ -225,13 +188,25 @@ export const Post = () => {
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
+            <div className="my-5">
+              <PostTextField
+                label={"移動のポイント（任意）"}
+                multiline
+                rows={2}
+                onChange={(e) => setMovePoint(e.target.value)}
+              />
+            </div>
           </form>
           <div className="mb-5">
-            <Button sx={buttonStyle} variant="contained" onClick={handleSubmit}>
-              送信
+            <Button
+              className="hover:bg-pink-500 text-lg bg-pink-400 py-3 px-5 text-white"
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              POST !
             </Button>
           </div>
-        </Box>
+        </div>
       </Modal>
     </div>
   );

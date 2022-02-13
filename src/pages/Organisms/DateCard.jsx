@@ -1,27 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
 import { pink, red } from "@mui/material/colors";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
-import {
-  setDoc,
-  doc,
-  increment,
-  deleteDoc,
-  getDoc,
-} from "firebase/firestore";
+import { setDoc, doc, increment, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
+import arrow from "../../images/arrow.png";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -33,17 +22,14 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
-const MediaStyle = {
-  backgroundColor: "#ffe0e0",
-  width: "500px",
-};
 
-export const DateCard = ({ user, post, }) => {
+export const DateCard = ({ user, post }) => {
   const [expanded, setExpanded] = useState(false);
   const [sellectAddresses, setSellectAddresses] = useState(post.addresses);
   const [isOpenImage, setOpenIsImage] = useState(true);
   const [currentAddress, setCurrentAddress] = useState(post.addresses[0]);
   const [favorite, setFavorite] = useState(false);
+  const [icon, setIcon] = useState(null);
 
   const getFavoId = async () => {
     const FavoRef = doc(db, "user", user.uid, "favoPlans", post.id);
@@ -54,7 +40,15 @@ export const DateCard = ({ user, post, }) => {
       setFavorite(false);
     }
   };
+  const getUserIcon = async (userId) => {
+    const user = await getDoc(doc(db, `user/${userId}`));
+    return user.data().img;
+  };
+
   useEffect(() => {
+    getUserIcon(post.userid).then((data) => {
+      setIcon(data);
+    });
     getFavoId();
   }, []);
 
@@ -65,7 +59,7 @@ export const DateCard = ({ user, post, }) => {
         doc(db, `DatePlan/${post.id}`),
         {
           favoTimes: increment(-1),
-          favoUsers: post.favoUsers?.filter(( uid ) => {
+          favoUsers: post.favoUsers?.filter((uid) => {
             return uid !== user.uid;
           }),
         },
@@ -108,41 +102,24 @@ export const DateCard = ({ user, post, }) => {
       position: currentAddress.location,
     });
   };
-  const imageStyle = {
-    borderRadius: "50%",
-  };
 
   return (
     <>
-      <div className="my-10 w-6/12 shadow-xl">
-        <Card sx={MediaStyle}>
-          <CardHeader
-            avatar={
-              <Link to={`/profile/${post.userid}`}>
-                <Avatar sx={{ bgcolor: pink[200] }}></Avatar>
-              </Link>
-            }
-            title={<h1 className="flex text-xl">{post.title}</h1>}
-          />
-          <div className="text-sm flex justify-around">
-            {sellectAddresses.map((sellectAddress, i) => (
-              <div
-                id={i}
-                onClick={() => changeViewMap(sellectAddress.id - 1)}
-                key={i}
-              >
-                {sellectAddress.name}
-              </div>
-            ))}
+      <div className="w-11/12 md:w-5/12 mx-auto my-10 text-xl ">
+        <div className="rounded-lg pt-5 px-5 w-full bg-white shadow-xl">
+          <div className="flex items-center">
+            <Link to={`/profile/${post.userid}`}>
+              <Avatar src={icon} sx={{ bgcolor: pink[200] }}></Avatar>
+            </Link>
+            <h1 className="pl-10 text-xl">{post.title}</h1>
           </div>
           {isOpenImage ? (
-            <CardMedia
-              style={{ height: "300px" }}
-              component="img"
-              image={post.img}
+            <img
+              className="my-5 h-72 flex justify-center mx-auto"
+              src={post.img}
             />
           ) : (
-            <div style={{ height: "300px" }}>
+            <div className="h-72 my-5">
               <GoogleMapReact
                 bootstrapURLKeys={{
                   key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -153,39 +130,59 @@ export const DateCard = ({ user, post, }) => {
               />
             </div>
           )}
-          <CardContent>
-            <div className="w-20 rounded-full bg-gray-200">{post.genre}</div>
-          </CardContent>
-          <CardActions disableSpacing>
-            {favorite ? (
-              <FavoriteIcon
-                onClick={() => {
-                  favo(post);
-                }}
-                sx={{ color: red[500] }}
-              />
-            ) : (
-              <FavoriteIcon
-                onClick={() => {
-                  favo(post);
-                }}
-              />
-            )}
-            <ExpandMore
-              expand={expanded}
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label="show more"
-            >
-              <ExpandMoreIcon />
+          <div className="my-5 p-1 w-24 rounded-full bg-gray-200">
+            {post.genre}
+          </div>
+          <div className="text-lg flex flex-col justify-around">
+            {sellectAddresses.map((sellectAddress, i) => (
+              <>
+                <div
+                  onClick={() => changeViewMap(sellectAddress.id - 1)}
+                  id={i}
+                  key={i}
+                  className="cursor-pointer mx-auto"
+                >
+                  {sellectAddress.name}
+                </div>
+                {2 > i && sellectAddresses[i + 1].name && (
+                  <div className="my-2">
+                    <img src={arrow} className="h-5 w-5 mx-auto" alt=""/>
+                    {/* <ArrowDownwardIcon className="text-pink-400" /> */}
+                  </div>
+                )}
+              </>
+            ))}
+          </div>
+          <CardActions className="flex justify-between">
+            <IconButton>
+              {favorite ? (
+                <FavoriteIcon
+                  onClick={() => {
+                    favo(post);
+                  }}
+                  sx={{ color: red[500] }}
+                  className="cursor-pointer"
+                />
+              ) : (
+                <FavoriteIcon
+                  onClick={() => {
+                    favo(post);
+                  }}
+                  className="cursor-pointer"
+                />
+              )}
+            </IconButton>
+            <ExpandMore onClick={handleExpandClick}>
+              <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
+                どんなデートかみたい！
+              </p>
             </ExpandMore>
           </CardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <CardContent>
-              <Typography paragraph>{post.description}</Typography>
-            </CardContent>
+          <Collapse in={expanded}>
+            <p>{post.description}</p>
+            <p>移動のポイント：{post.movePoint}</p>
           </Collapse>
-        </Card>
+        </div>
       </div>
     </>
   );

@@ -1,36 +1,22 @@
-import React, { useState } from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
+import React, { useState,useEffect} from "react";
+import { Link } from "react-router-dom";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { red, pink } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import { db } from "../../config/firebase";
-import {
-  setDoc,
-  doc,
-  increment,
-  deleteDoc,
-  query,
-  onSnapshot,
-  collection,
-  getDocs,
-  getDoc,
-  where,
-} from "firebase/firestore";
+import { getUserIcon } from "../../utils/getUserIcon";
+import { setDoc, doc, increment, deleteDoc } from "firebase/firestore";
 
+import arrow from "../../images/arrow.png";
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -41,9 +27,7 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
-const MediaStyle = {
-  backgroundColor: "#ffe0e0",
-};
+
 //プロフィールページの投稿
 export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
   const [open, setOpen] = useState(false);
@@ -55,11 +39,13 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
   const [favorite, setFavorite] = useState(
     currentPost.favoUsers ? currentPost.favoUsers.includes(user.uid) : false
   );
+  const [icon, setIcon] = useState(null);
+
   const click = (q) => {
     deletePost(q);
   };
 
-  const favo = () => {
+  const favo = (currentPost) => {
     if (favorite) {
       deleteDoc(doc(db, `user/${user.uid}/favoPlans/${currentPost.id}`));
       setDoc(
@@ -90,19 +76,6 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
     setFavorite(!favorite);
   };
 
-  const style = {
-    display: "flex",
-    justifyContent: "cetnter",
-    alignItems: "center",
-    flexDirection: "column",
-    margin: "auto",
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-    width: "230px",
-  };
-
   const changeViewMap = (addressId, id) => {
     if (isOpenImage) {
       setOpenIsImage(!isOpenImage);
@@ -123,96 +96,107 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
     });
   };
 
+  useEffect(() => {
+    getUserIcon(currentPost.userid).then((data) => {
+      setIcon(data);
+    });
+  }, []);
+
   return (
-    <div className="my-10 w-6/12 shadow-xl">
-      <Card sx={MediaStyle}>
-        <CardHeader
-          avatar={<Avatar sx={{ bgcolor: red[500] }}></Avatar>}
-          action={
+    <>
+      <div className="w-11/12 md:w-5/12 mx-auto my-10 text-xl">
+        <div className="rounded-lg pt-5 bg-white shadow-xl">
+          <div className="flex justify-between items-center px-5">
+            <div className="flex items-center">
+              <Link to={`/profile/${currentPost.userid}`}>
+                <Avatar src={icon} sx={{ bgcolor: pink[200] }}></Avatar>
+              </Link>
+              <h1 className="pl-10 text-lg">{currentPost.title}</h1>
+            </div>
             <>
-              <Button onClick={handleOpen}>
+              <IconButton onClick={handleOpen}>
                 <MoreVertIcon />
-              </Button>
+              </IconButton>
               <Modal open={open} onClose={handleClose}>
-                <Box sx={style}>
-                  <div className="flex flex-col">
-                    <div>投稿を削除しますか？</div>
-                    <div>
-                      <Button onClick={() => click(currentPost.id)}>
-                        削除
-                      </Button>
-                    </div>
+                <div className="flex flex-col mx-auto rounded-md shadow-md items-center p-4 w-52 mt-36 bg-white border">
+                  <div>投稿を削除しますか？</div>
+                  <div>
+                    <Button onClick={() => click(currentPost.id)}>削除</Button>
                   </div>
-                </Box>
+                </div>
               </Modal>
             </>
-          }
-          title={currentPost.title}
-          sx={{ fontsize: "15px" }}
-        />
-        <div className="flex justify-around">
-          {currentPost.addresses.map((item, b) => {
-            return (
-              <span
-                key={b}
-                onClick={() => changeViewMap(item.id - 1, i)}
-                className="mr-2"
-              >
-                {item.name}
-                {/* {console.log(item)} */}
-              </span>
-            );
-          })}
+          </div>
+          <div className="px-5">
+            {isOpenImage ? (
+              <img
+                className="my-5 h-72 flex justify-center mx-auto"
+                src={currentPost.img}
+              />
+            ) : (
+              <div className="h-72 my-5">
+                <GoogleMapReact
+                  bootstrapURLKeys={{
+                    key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+                  }}
+                  defaultCenter={currentAddress}
+                  defaultZoom={15}
+                  onGoogleApiLoaded={handleApiLoaded}
+                />
+              </div>
+            )}
+            <div className="p-1 w-24 rounded-full bg-gray-200">
+              {currentPost.genre}
+            </div>
+            <div className="flex flex-col justify-around">
+              {currentPost.addresses.map((item, i) => (
+                <div
+                  onClick={() => changeViewMap(item.id - 1, i)}
+                  id={i}
+                  key={i}
+                  className="cursor-pointer w-24 mx-auto"
+                >
+                  {item.name}
+                  {2 > i && currentPost.addresses[i + 1].name && (
+                    <div className="my-2">
+                      <img src={arrow} className="h-5 w-5 mx-auto" alt="" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <CardActions className="flex justify-between">
+              <IconButton>
+                {favorite ? (
+                  <FavoriteIcon
+                    onClick={() => {
+                      favo(currentPost);
+                    }}
+                    sx={{ color: red[500] }}
+                  />
+                ) : (
+                  <FavoriteIcon
+                    onClick={() => {
+                      favo(currentPost);
+                    }}
+                  />
+                )}
+              </IconButton>
+              <ExpandMore onClick={handleExpandClick}>
+                <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
+                  どんなデートかみたい！
+                </p>
+              </ExpandMore>
+            </CardActions>
+            <Collapse in={expanded}>
+              <Typography paragraph>{currentPost.description}</Typography>
+              <Typography paragraph>
+                移動のポイント：{currentPost.movePoint}
+              </Typography>
+            </Collapse>
+          </div>
         </div>
-        {isOpenImage ? (
-          <CardMedia component="img" image={currentPost.img} />
-        ) : (
-          <div style={{ height: "345px" }}>
-            <GoogleMapReact
-              bootstrapURLKeys={{
-                key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-              }}
-              defaultCenter={currentAddress}
-              defaultZoom={15}
-              onGoogleApiLoaded={handleApiLoaded}
-            />
-          </div>
-        )}
-        <CardContent>
-          <div className="w-20 rounded-full bg-gray-200">
-            {currentPost.genre}
-          </div>
-        </CardContent>
-        <CardActions disableSpacing>
-          {favorite ? (
-            <FavoriteIcon
-              onClick={() => {
-                favo();
-              }}
-              sx={{ color: red[500] }}
-            />
-          ) : (
-            <FavoriteIcon
-              onClick={() => {
-                favo();
-              }}
-            />
-          )}
-          <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph>{currentPost.description}</Typography>
-          </CardContent>
-        </Collapse>
-      </Card>
-    </div>
+      </div>
+    </>
   );
 };

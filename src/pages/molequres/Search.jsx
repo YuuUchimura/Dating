@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SearchIcon from "@mui/icons-material/Search";
 import { DateGenres } from "../atoms/DateGenre";
@@ -12,24 +11,12 @@ import {
   collection,
   where,
   orderBy,
-  getDoc,
-  getDocs,
 } from "firebase/firestore";
 
 export const Search = ({ choice, setChoice, setChoiceValues }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const style = {
-    margin: "auto",
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    height: "80vh",
-    overflow: "scroll",
-    width: "80vw",
-  };
 
   const Searching = (e) => {
     const choiceImage = e.target.alt;
@@ -50,8 +37,11 @@ export const Search = ({ choice, setChoice, setChoiceValues }) => {
 
   return (
     <>
-      <Button onClick={handleOpen}>
-        <SearchIcon />
+      <Button className="text-xl lg:fixed lg:top-52 lg:right-10 lg:w-1/4 rounded-lg bg-white" onClick={handleOpen}>
+        <div>
+          デートジャンルからさがす
+          <SearchIcon fontSize="large" />
+        </div>
       </Button>
       <div>
         <Modal
@@ -60,14 +50,14 @@ export const Search = ({ choice, setChoice, setChoiceValues }) => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <h1 className="my-10 text-2xl">デートジャンル</h1>
-            <div className="flex flex-wrap  my-5 content-center justify-center">
+          <div className="md:text-2xl font-semibold overflow-scroll rounded-md h-3/5 shadow-md mt-36 p-5 flex flex-col justyfy-center items-center mx-auto bg-white border w-4/6 ">
+            <h1 className="md:my-10">デートジャンル</h1>
+            <div className="flex flex-wrap my-5 content-center justify-center">
               {DateGenreImages.map((image, i) => {
                 return (
                   <div
                     key={i}
-                    className="flex flex-col rounded-md my-5 w-80 mx-auto justify- bg-pink-100"
+                    className="md:flex md:flex-col font-medium rounded-lg my-5 w-24 md:w-80 mx-auto bg-pink-100"
                   >
                     <Button onClick={Searching}>{image}</Button>
                     {DateGenres[i]}
@@ -75,7 +65,7 @@ export const Search = ({ choice, setChoice, setChoiceValues }) => {
                 );
               })}
             </div>
-          </Box>
+          </div>
         </Modal>
       </div>
     </>

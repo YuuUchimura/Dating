@@ -11,6 +11,8 @@ import { useFetchMyPostAddress } from "../hooks/useFetchMyPostAddress";
 import { LogoutButton } from "../pages/atoms/Logout";
 import { AuthContext } from "../AuthService";
 import { FavoPostCard } from "./Organisms/FavoPostCard";
+import { red } from "@mui/material/colors";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 export const Profile = () => {
   const user = useContext(AuthContext);
@@ -25,8 +27,8 @@ export const Profile = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isMyposts, setIsMyPosts] = useState(true);
 
-  const chageIsMyPosts = () => {
-    setIsMyPosts(!isMyposts);
+  const chageIsMyPosts = (toggle) => {
+    setIsMyPosts(toggle);
   };
 
   const request = async () => {
@@ -57,48 +59,80 @@ export const Profile = () => {
   }, [user]);
 
   return (
-    <Container>
-      <div className="w-10/12 mx-auto">
-        <header className="h-24 flex items-center justify-between">
-          <div>
-            <Link to="/">
-              <img width={150} src={Dating} alt="" />
-            </Link>
-          </div>
-          <div>
-            <LogoutButton />
-          </div>
-        </header>
-        <main>
-          {user.uid === id ? <EditProfile /> : null}
-          <div className="h-72 flex justify-around">
-            <div className="flex flex-col justify-around">
-              <div>
-                <img
-                  className="rounded-full h-48 w-48"
-                  src={currentUser?.img}
-                  alt="MyAvater"
-                />
-              </div>
-              <span>{currentUser?.name}</span>
+    <>
+      <header className="w-11/12 md:w-9/12 h-48 flex items-center justify-between mx-auto">
+        <div>
+          <Link to="/">
+            <img width={300} src={Dating} alt="" />
+          </Link>
+        </div>
+        <div>
+          <LogoutButton />
+        </div>
+      </header>
+      <Container>
+        <div className="flex justify-around mx-auto w-10/12">
+          <div className="flex flex-col justify-around">
+            <div>
+              <img
+                className="rounded-full h-24 w-24 md:h-64 md:w-64 mx-auto"
+                src={currentUser?.img}
+                alt="MyAvater"
+              />
             </div>
-            <div className="flex flex-col justify-around">
+            <span className="md:text-3xl py-5 md:py-10">
+              {currentUser?.name}
+            </span>
+            {user.uid === id ? <EditProfile /> : null}
+          </div>
+          <div className="my-auto h-3/4 w-3/5 md: py-10 md:w-2/5 flex flex-col justify-around text-xl md:text-2xl lg:text-3xl rounded-lg bg-white">
+            <div className="flex justify-around">
               <div>
-                <div>{currentUser?.selfIntroduction}</div>
+                <h2 className="mb-3 md:px-2 md:py-1 border-4 rounded-lg border-pink-300">
+                  sex
+                </h2>
+                <h3>{currentUser?.sex}</h3>
+              </div>
+              <div>
+                <h2 className="mb-3 md:px-2 md:py-1 border-4 rounded-lg border-pink-300">
+                  age
+                </h2>
+                <h3>{currentUser?.age}</h3>
+              </div>
+              <div>
+                <h2 className="mb-3 md:px-2 md:py-1 border-4 rounded-lg border-pink-300">
+                  address
+                </h2>
+                <h3>{currentUser?.address}</h3>
               </div>
             </div>
+            <div className="text-sm md:text-lg lg:text-2xl w-10/12  md:mt-8 mx-auto">
+              <div>{currentUser?.selfIntroduction}</div>
+            </div>
           </div>
-          <div className="flex justify-around my-16 min-w-full border-black border-y">
-            <span className="border-black border-x px-5">投稿</span>
+        </div>
+        <div className="text-lg md:text-2xl lg:text-3xl my-8 md:my-16 bg-white border-y-4 border-pink-300">
+          <div className="w-8/12 flex justify-between mx-auto">
             <span
-              className="border-black border-x px-5"
+              className="cursor-pointer py-5 "
               onClick={() => {
-                chageIsMyPosts();
+                chageIsMyPosts(true);
               }}
             >
-              Dateしたい
+              My Post
+            </span>
+            <span
+              className="cursor-pointer py-5"
+              onClick={() => {
+                chageIsMyPosts(false);
+              }}
+            >
+              Dateしたい!
+              <FavoriteIcon sx={{ color: red[500] }} />
             </span>
           </div>
+        </div>
+        <div className="md:flex">
           {isMyposts ? (
             <MyPosts
               myAddress={myAddress}
@@ -107,9 +141,8 @@ export const Profile = () => {
               deletePost={deletePost}
             />
           ) : (
-            <div>
+            <>
               {favoPosts.map((favoPost, i) => {
-                // console.log(favoPost)
                 return (
                   <FavoPostCard
                     myAddress={myAddress}
@@ -120,10 +153,10 @@ export const Profile = () => {
                   />
                 );
               })}
-            </div>
+            </>
           )}
-        </main>
-      </div>
-    </Container>
+        </div>
+      </Container>
+    </>
   );
 };

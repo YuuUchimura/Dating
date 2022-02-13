@@ -10,9 +10,9 @@ import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { documentId } from "./post";
 
 export const EditProfile = () => {
+  const user = useContext(AuthContext);
   const [name, setName] = useState("");
   const [selfIntroduction, setSelfIntroduction] = useState("");
   const [img, setImg] = useState("");
@@ -25,8 +25,6 @@ export const EditProfile = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const user = useContext(AuthContext);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const UserRef = "user";
@@ -37,7 +35,6 @@ export const EditProfile = () => {
       const fileName = randomChar + "_" + img.name;
       const imageRef = `images/${fileName}`;
       const uploadMsgImage = uploadBytesResumable(ref(storage, imageRef), img);
-
       uploadMsgImage.on(
         "state_changed",
         () => {},
@@ -64,27 +61,6 @@ export const EditProfile = () => {
     handleClose();
   };
 
-  const buttonStyle = {
-    backgroundColor: "#ff00ff",
-    "&:hover": {
-      backgroundColor: "#ff00ff",
-      opacity: 0.8,
-    },
-  };
-
-  const style = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "cetnter",
-    alignItems: "center",
-    margin: "auto",
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    height: "70vh",
-    overflow: "scroll",
-    width: "50vw",
-  };
   const previewFile = (file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -102,9 +78,12 @@ export const EditProfile = () => {
       e.target.value = "";
     }
   };
+
   return (
     <>
-      <Button onClick={handleOpen}>プロフィール編集</Button>
+      <div className="text-sm font-medium cursor-pointer" onClick={handleOpen}>
+        プロフィール編集
+      </div>
       <div>
         <Modal
           open={open}
@@ -112,26 +91,28 @@ export const EditProfile = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <h1 className="mt-5 text-2xl">プロフィール編集</h1>
+          <div className="mt-36 rounded-md shadow-md flex flex-col justyfy-center items-center mx-auto bg-white border w-2/5 ">
+            <h1 className="text-md md:text-2xl my-5">プロフィール編集</h1>
             <form>
-              <div>
+              <div className="flex justify-center">
                 <Box className="text-left">
                   <IconButton>
                     <label>
                       <input
-                        className="text-center hidden"
+                        className="flex justify-center hidden"
                         type="file"
                         onChange={onChangeImageHandler}
                       />
                       <div className="flex justify-center">
                         {imageIsSelected ? (
-                          <img width={50} src={prevAvatar.toString()} />
+                          <img width={100} src={prevAvatar.toString()} />
                         ) : (
-                          <AccountCircleIcon width={100} fontSize={"large"} />
+                          <div className="flex justify-center items-center flex-col">
+                            <AccountCircleIcon fontSize={"large"} />
+                            <p className="text-sm">プロフィール写真の変更</p>
+                          </div>
                         )}
                       </div>
-                      <p className="text-sm">プロフィール写真の変更</p>
                     </label>
                   </IconButton>
                 </Box>
@@ -176,14 +157,14 @@ export const EditProfile = () => {
             </form>
             <div className="mb-5">
               <Button
-                sx={buttonStyle}
+                className="hover:bg-pink-500 text-lg bg-pink-400 py-3 px-6 text-white"
                 variant="contained"
                 onClick={handleSubmit}
               >
-                完了
+                編集
               </Button>
             </div>
-          </Box>
+          </div>
         </Modal>
       </div>
     </>
