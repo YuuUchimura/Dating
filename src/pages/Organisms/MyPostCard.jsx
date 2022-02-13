@@ -1,4 +1,4 @@
-import React, { useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
@@ -105,11 +105,11 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
   return (
     <>
       <div className="w-11/12 md:w-5/12 mx-auto my-10 text-xl">
-        <div className="rounded-lg pt-5 bg-white shadow-xl">
+        <div className="rounded-lg py-5 bg-white shadow-xl">
           <div className="flex justify-between items-center px-5">
             <div className="flex items-center">
               <Link to={`/profile/${currentPost.userid}`}>
-                <Avatar src={icon} sx={{ bgcolor: pink[200] }}></Avatar>
+                <Avatar src={icon}></Avatar>
               </Link>
               <h1 className="pl-10 text-lg">{currentPost.title}</h1>
             </div>
@@ -145,27 +145,10 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
                 />
               </div>
             )}
-            <div className="p-1 w-24 rounded-full bg-gray-200">
-              {currentPost.genre}
-            </div>
-            <div className="flex flex-col justify-around">
-              {currentPost.addresses.map((item, i) => (
-                <div
-                  onClick={() => changeViewMap(item.id - 1, i)}
-                  id={i}
-                  key={i}
-                  className="cursor-pointer w-24 mx-auto"
-                >
-                  {item.name}
-                  {2 > i && currentPost.addresses[i + 1].name && (
-                    <div className="my-2">
-                      <img src={arrow} className="h-5 w-5 mx-auto" alt="" />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            <CardActions className="flex justify-between">
+            <div className="flex justify-between">
+              <div className="p-1 w-24 rounded-full bg-gray-200">
+                {currentPost.genre}
+              </div>
               <IconButton>
                 {favorite ? (
                   <FavoriteIcon
@@ -182,12 +165,31 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
                   />
                 )}
               </IconButton>
+            </div>
+            <div className="flex flex-col justify-around">
+              {currentPost.addresses.map((item, i) => (
+                <>
+                  <div
+                    onClick={() => changeViewMap(item.id - 1, i)}
+                    id={i}
+                    key={i}
+                    className="cursor-pointer w-24 mx-auto"
+                  >
+                    {item.name}
+                  </div>
+                  {2 > i && currentPost.addresses[i + 1].name && (
+                    <div className="my-2">
+                      <img src={arrow} className="h-5 w-5 mx-auto" alt="" />
+                    </div>
+                  )}
+                </>
+              ))}
+            </div>
               <ExpandMore onClick={handleExpandClick}>
                 <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
                   どんなデートかみたい！
                 </p>
               </ExpandMore>
-            </CardActions>
             <Collapse in={expanded}>
               <Typography paragraph>{currentPost.description}</Typography>
               <Typography paragraph>

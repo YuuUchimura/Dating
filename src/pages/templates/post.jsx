@@ -113,10 +113,10 @@ export const Post = () => {
     <div className="font-Comic">
       <div className="text-2xl">
         <Button
-          className="hover:bg-pink-500 text-lg bg-pink-400 py-5 px-5 text-white"
+          className="w-full hover:bg-pink-500 text-sm md:text-lg bg-pink-400 md:py-10 md:px-5 text-white"
           onClick={handleOpen}
         >
-          デートプランをPOSTする !
+          POSTする !
         </Button>
       </div>
       <Modal

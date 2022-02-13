@@ -10,6 +10,10 @@ import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../../config/firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 export const EditProfile = () => {
   const user = useContext(AuthContext);
@@ -91,7 +95,7 @@ export const EditProfile = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <div className="mt-36 rounded-md shadow-md flex flex-col justyfy-center items-center mx-auto bg-white border w-2/5 ">
+          <div className="mt-36 h-96 overflow-scroll rounded-md shadow-md flex flex-col justyfy-center items-center mx-auto bg-white border w-4/5 md:w-2/5 ">
             <h1 className="text-md md:text-2xl my-5">プロフィール編集</h1>
             <form>
               <div className="flex justify-center">

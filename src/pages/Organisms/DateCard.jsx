@@ -105,11 +105,11 @@ export const DateCard = ({ user, post }) => {
 
   return (
     <>
-      <div className="w-11/12 md:w-5/12 mx-auto my-10 text-xl ">
-        <div className="rounded-lg pt-5 px-5 w-full bg-white shadow-xl">
+      <div className="w-11/12 md:w-5/12 mx-auto mb-10 text-xl ">
+        <div className="rounded-lg py-5 px-5 w-full bg-white shadow-xl">
           <div className="flex items-center">
             <Link to={`/profile/${post.userid}`}>
-              <Avatar src={icon} sx={{ bgcolor: pink[200] }}></Avatar>
+              <Avatar src={icon}></Avatar>
             </Link>
             <h1 className="pl-10 text-xl">{post.title}</h1>
           </div>
@@ -130,30 +130,10 @@ export const DateCard = ({ user, post }) => {
               />
             </div>
           )}
-          <div className="my-5 p-1 w-24 rounded-full bg-gray-200">
-            {post.genre}
-          </div>
-          <div className="text-lg flex flex-col justify-around">
-            {sellectAddresses.map((sellectAddress, i) => (
-              <>
-                <div
-                  onClick={() => changeViewMap(sellectAddress.id - 1)}
-                  id={i}
-                  key={i}
-                  className="cursor-pointer mx-auto"
-                >
-                  {sellectAddress.name}
-                </div>
-                {2 > i && sellectAddresses[i + 1].name && (
-                  <div className="my-2">
-                    <img src={arrow} className="h-5 w-5 mx-auto" alt=""/>
-                    {/* <ArrowDownwardIcon className="text-pink-400" /> */}
-                  </div>
-                )}
-              </>
-            ))}
-          </div>
-          <CardActions className="flex justify-between">
+          <div className="flex justify-between">
+            <div className="my-5 p-1 w-24 rounded-full bg-gray-200">
+              {post.genre}
+            </div>
             <IconButton>
               {favorite ? (
                 <FavoriteIcon
@@ -172,12 +152,31 @@ export const DateCard = ({ user, post }) => {
                 />
               )}
             </IconButton>
+          </div>
+          <div className="text-lg flex flex-col justify-around">
+            {sellectAddresses.map((sellectAddress, i) => (
+              <>
+                <div
+                  onClick={() => changeViewMap(sellectAddress.id - 1)}
+                  id={i}
+                  key={i}
+                  className="cursor-pointer mx-auto"
+                >
+                  {sellectAddress.name}
+                </div>
+                {2 > i && sellectAddresses[i + 1].name && (
+                  <div className="my-2">
+                    <img src={arrow} className="h-5 w-5 mx-auto" alt="" />
+                  </div>
+                )}
+              </>
+            ))}
+          </div>
             <ExpandMore onClick={handleExpandClick}>
               <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
                 どんなデートかみたい！
               </p>
             </ExpandMore>
-          </CardActions>
           <Collapse in={expanded}>
             <p>{post.description}</p>
             <p>移動のポイント：{post.movePoint}</p>

@@ -7,9 +7,9 @@ module.exports = {
       Comic: ["TsukuARdGothic-Regular"],
     },
     extend: {
-      // backgroundImage: (theme) => ({
-      //   "header_bg": "url('/images/header_bg.jpg')",
-      // }),
+      backgroundImage: {
+        "header-bg": "url('./images/header-bg.jpg')",
+      },
     },
   },
   variants: {

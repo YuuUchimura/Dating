@@ -12,17 +12,21 @@ import { useFetchUser } from "../hooks/useFetchUser";
 import { useFetchDatePlan } from "../hooks/useFetchDatePlan";
 import { LoginUserCard } from "./Organisms/LoginUserCard";
 import { LogoutButton } from "./atoms/Logout";
-// import  header_bg  from "../images/header-bg.jpg";
+import Avatar from "@mui/material/Avatar";
 
 export const Home = () => {
   const user = useContext(AuthContext);
   const [choiceValues, setChoiceValues] = useState([]);
   const [choice, setChoice] = useState(true);
-  const { fetchDatingUser, fetchPostUser, fetchLoginUser } = useFetchUser({
+  const {
+    fetchDatingUser,
+    fetchPostUser,
+    fetchLoginUser,
+    loginUser,
+  } = useFetchUser({
     user,
   });
   const { fetchDatePlan, posts } = useFetchDatePlan();
-
   const request = async () => {
     await fetchDatingUser();
     await fetchPostUser({ user });
@@ -35,13 +39,16 @@ export const Home = () => {
 
   return (
     <div className="font-Comic">
-      <div className="shadow-lg">
-        <header className="w-11/12 md:w-9/12 h-48 flex items-center justify-center md:justify-between mx-auto">
+      <div className="bg-header-bg bg-cover shadow-lg">
+        <header className="w-10/12 md:w-9/12 h-28 md:h-48 flex items-center justify-between mx-auto">
           <Link to="/">
             <img width={300} src={Dating} alt="" />
           </Link>
           <div className="flex">
             <LogoutButton />
+            <Link className="lg:invisible " to={`/profile/${user.uid}`}>
+              <Avatar src={loginUser[0]?.img} ></Avatar>
+            </Link>
           </div>
         </header>
       </div>
@@ -54,7 +61,9 @@ export const Home = () => {
             setChoiceValues={setChoiceValues}
           />
         </div>
-        {/* <div className=""> */}
+        <h1 className="w-11/12 lg:w-8/12 my-10 mx-auto lg:mx-0 text-2xl md:text-4xl">
+          みんなの最高のデートプラン
+        </h1>
         <div className="w-11/12 mx-auto lg:flex lg:w-8/12 lg:mx-0">
           <div>
             {choice ? (
@@ -78,10 +87,9 @@ export const Home = () => {
             )}
           </div>
         </div>
-        <div className="fixed bottom-10 right-10 lg:w-1/4">
+        <div className="fixed bottom-10 right-10 w-1/6 lg:w-1/4">
           <Post />
         </div>
-        {/* </div> */}
       </Container>
     </div>
   );

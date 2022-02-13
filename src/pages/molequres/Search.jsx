@@ -37,7 +37,7 @@ export const Search = ({ choice, setChoice, setChoiceValues }) => {
 
   return (
     <>
-      <Button className="text-xl lg:fixed lg:top-52 lg:right-10 lg:w-1/4 rounded-lg bg-white" onClick={handleOpen}>
+      <Button className="text-lg md:text-xl lg:fixed lg:top-52 lg:right-10 lg:w-1/4 rounded-lg bg-white" onClick={handleOpen}>
         <div>
           デートジャンルからさがす
           <SearchIcon fontSize="large" />

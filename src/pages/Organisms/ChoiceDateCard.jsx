@@ -93,10 +93,10 @@ export const ChoiceDateCard = ({ choiceValue, user }) => {
   return (
     <>
       <div className="w-11/12 md:w-5/12 mx-auto my-10 text-xl ">
-        <div className="rounded-lg pt-5 px-5 w-full bg-white shadow-xl">
+        <div className="rounded-lg py-5 px-5 w-full bg-white shadow-xl">
           <div className="flex items-center">
             <Link to={`/profile/${choiceValue.userid}`}>
-              <Avatar src={icon} sx={{ bgcolor: pink[200] }}></Avatar>
+              <Avatar src={icon}></Avatar>
             </Link>
             <h1 className="pl-10 text-xl">{choiceValue.title}</h1>
           </div>
@@ -117,27 +117,10 @@ export const ChoiceDateCard = ({ choiceValue, user }) => {
               />
             </div>
           )}
-          <div className="my-5 p-1 w-24 rounded-full bg-gray-200">
-            {choiceValue.genre}
-          </div>
-          <div className="flex flex-col justify-around">
-            {changeViewMaps.map((sellectAddress, i) => (
-              <div
-                onClick={() => changeViewMap(sellectAddress.id - 1)}
-                id={i}
-                key={i}
-                className="cursor-pointer w-24 mx-auto"
-              >
-                {sellectAddress.name}
-                {2 > i && changeViewMaps[i + 1].name && (
-                  <div className="my-2">
-                    <img src={arrow} className="h-5 w-5 mx-auto" alt="" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          <CardActions className="flex justify-between">
+          <div className="flex justify-between">
+            <div className="my-5 p-1 w-24 rounded-full bg-gray-200">
+              {choiceValue.genre}
+            </div>
             <IconButton>
               {favorite ? (
                 <FavoriteIcon
@@ -154,12 +137,34 @@ export const ChoiceDateCard = ({ choiceValue, user }) => {
                 />
               )}
             </IconButton>
-            <ExpandMore onClick={handleExpandClick}>
-              <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
-                どんなデートかみたい！
-              </p>
-            </ExpandMore>
-          </CardActions>
+          </div>
+          <div className="flex flex-col justify-around">
+            {changeViewMaps.map((sellectAddress, i) => (
+              <>
+                <div
+                  onClick={() => changeViewMap(sellectAddress.id - 1)}
+                  id={i}
+                  key={i}
+                  className="cursor-pointer w-24 mx-auto"
+                >
+                  {sellectAddress.name}
+                </div>
+
+                {2 > i && changeViewMaps[i + 1].name && (
+                  <div className="my-2">
+                    <img src={arrow} className="h-5 w-5 mx-auto" alt="" />
+                  </div>
+                )}
+              </>
+            ))}
+          </div>
+
+          <ExpandMore onClick={handleExpandClick}>
+            <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
+              どんなデートかみたい！
+            </p>
+          </ExpandMore>
+
           <Collapse in={expanded}>
             <p>{choiceValue.description}</p>
             <p>移動のポイント：{choiceValue.movePoint}</p>

@@ -60,16 +60,18 @@ export const Profile = () => {
 
   return (
     <>
-      <header className="w-11/12 md:w-9/12 h-48 flex items-center justify-between mx-auto">
-        <div>
-          <Link to="/">
-            <img width={300} src={Dating} alt="" />
-          </Link>
-        </div>
-        <div>
-          <LogoutButton />
-        </div>
-      </header>
+      <div className="bg-header-bg bg-cover">
+        <header className="w-10/12 md:w-9/12 h-28 md:h-48 flex items-center justify-between mx-auto">
+          <div>
+            <Link to="/">
+              <img width={300} src={Dating} alt="" />
+            </Link>
+          </div>
+          <div>
+            <LogoutButton />
+          </div>
+        </header>
+      </div>
       <Container>
         <div className="flex justify-around mx-auto w-10/12">
           <div className="flex flex-col justify-around">
@@ -85,7 +87,7 @@ export const Profile = () => {
             </span>
             {user.uid === id ? <EditProfile /> : null}
           </div>
-          <div className="my-auto h-3/4 w-3/5 md: py-10 md:w-2/5 flex flex-col justify-around text-xl md:text-2xl lg:text-3xl rounded-lg bg-white">
+          <div className="my-auto pt-5 md:h-3/4 w-3/5 md:py-10 md:w-2/5 flex flex-col justify-around text-xl md:text-2xl lg:text-3xl rounded-lg bg-white">
             <div className="flex justify-around">
               <div>
                 <h2 className="mb-3 md:px-2 md:py-1 border-4 rounded-lg border-pink-300">
@@ -111,7 +113,7 @@ export const Profile = () => {
             </div>
           </div>
         </div>
-        <div className="text-lg md:text-2xl lg:text-3xl my-8 md:my-16 bg-white border-y-4 border-pink-300">
+        <div className="text-lg md:text-2xl lg:text-3xl my-8  bg-white border-y-4 border-pink-300">
           <div className="w-8/12 flex justify-between mx-auto">
             <span
               className="cursor-pointer py-5 "
