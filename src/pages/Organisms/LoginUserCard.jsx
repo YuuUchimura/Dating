@@ -16,7 +16,7 @@ export const LoginUserCard = () => {
     (async () => {
       await fetchLoginUser();
     })();
-  }, []);
+  }, [loginUser]);
 
   return (
     <div className="invisible flex flex-col h-8 lg:h-96 lg:visible lg:py-5 lg:fixed lg:top-96 lg:right-24 lg:w-1/4 rounded-lg bg-white">

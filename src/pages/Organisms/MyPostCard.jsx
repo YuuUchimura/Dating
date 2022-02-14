@@ -158,7 +158,8 @@ export const MyPostCard = ({
               <div className="p-1 w-32 rounded-full bg-gray-200">
                 {currentPost.genre}
               </div>
-              <IconButton>
+              <>
+                {/* <IconButton> */}
                 {favorite ? (
                   <FavoriteIcon
                     onClick={() => {
@@ -173,15 +174,15 @@ export const MyPostCard = ({
                     }}
                   />
                 )}
-              </IconButton>
+              </>
+              {/* </IconButton> */}
             </div>
             <div className="flex flex-col justify-around">
               {currentPost.addresses.map((item, i) => (
-                <>
+                <div key={i}>
                   <div
                     onClick={() => changeViewMap(item.id - 1, i)}
                     id={i}
-                    key={i}
                     className="cursor-pointer mx-auto"
                   >
                     {item.name}
@@ -191,7 +192,7 @@ export const MyPostCard = ({
                       <img src={arrow} className="h-5 w-5 mx-auto" alt="" />
                     </div>
                   )}
-                </>
+                </div>
               ))}
             </div>
             <ExpandMore onClick={handleExpandClick}>

@@ -28,8 +28,6 @@ export const useFetchMyPost = () => {
     return unSub;
   };
 
-
-
   const getfavoPosts = async () => {
     const FavoRef = query(collection(db, "user", user.uid, "favoPlans"));
     const docSnap = await getDocs(FavoRef);

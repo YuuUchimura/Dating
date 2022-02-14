@@ -10,12 +10,11 @@ import { Container } from "./atoms/Container";
 import Dating from "../images/Dating-logo.png";
 import { useFetchUser } from "../hooks/useFetchUser";
 import { useFetchDatePlan } from "../hooks/useFetchDatePlan";
-import { LoginUserCard } from "./Organisms/LoginUserCard";
+// import { LoginUserCard } from "./Organisms/LoginUserCard";
 import { LogoutButton } from "./atoms/Logout";
 import Avatar from "@mui/material/Avatar";
 import { Reference } from "./atoms/Reference";
 import love from "../images/love.png";
-
 export const Home = () => {
   const user = useContext(AuthContext);
   const [choiceValues, setChoiceValues] = useState([]);
@@ -24,12 +23,16 @@ export const Home = () => {
     user,
   });
   const { fetchDatePlan, posts } = useFetchDatePlan();
+
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       await fetchPostUser();
       await fetchLoginUser();
-      await fetchDatePlan();
-    })();
+      const unSub = fetchDatePlan();
+      return unSub;
+    };
+    const unSub = fetchData();
+    return unSub
   }, []);
 
   return (
@@ -68,13 +71,13 @@ export const Home = () => {
         <div className="w-11/12 mx-auto lg:flex lg:w-8/12 lg:mx-0">
           <div>
             {choice ? (
-              <ul className="md:flex flex-wrap mx-auto">
+              <div className="md:flex flex-wrap mx-auto">
                 {posts.map((post, i) => {
-                  return <DateCard user={user} key={i} post={post} />;
+                  return <DateCard user={user} key={post.id} post={post} />;
                 })}
-              </ul>
+              </div>
             ) : (
-              <ul className="md:flex flex-wrap mx-auto">
+              <div className="md:flex flex-wrap mx-auto">
                 {choiceValues.map((choiceValue, i) => {
                   return (
                     <ChoiceDateCard
@@ -84,7 +87,7 @@ export const Home = () => {
                     />
                   );
                 })}
-              </ul>
+              </div>
             )}
           </div>
         </div>

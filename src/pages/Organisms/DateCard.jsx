@@ -103,8 +103,8 @@ export const DateCard = ({ user, post }) => {
   };
 
   return (
-    <>
-      <div className="font-Skia w-11/12 md:w-5/12 mx-auto mb-10 text-xl ">
+    <React.Fragment>
+      <div className="font-Skia w-11/12 md:w-5/12 mx-auto mb-10 text-xl">
         <div className="rounded-lg py-5 px-5 w-full bg-white shadow-xl">
           <div className="flex items-center">
             <Link to={`/profile/${post.userid}`}>
@@ -134,7 +134,8 @@ export const DateCard = ({ user, post }) => {
             <div className="my-5 p-1 w-32 rounded-full bg-gray-200">
               {post.genre}
             </div>
-            <IconButton>
+            <div>
+              {/* <IconButton> */}
               {favorite ? (
                 <FavoriteIcon
                   onClick={() => {
@@ -151,15 +152,15 @@ export const DateCard = ({ user, post }) => {
                   className="cursor-pointer"
                 />
               )}
-            </IconButton>
+            </div>
+            {/* </IconButton> */}
           </div>
           <div className="text-lg flex flex-col justify-around">
             {sellectAddresses.map((sellectAddress, i) => (
-              <>
+              <div key={i}>
                 <div
                   onClick={() => changeViewMap(sellectAddress.id - 1)}
                   id={i}
-                  key={i}
                   className="cursor-pointer mx-auto"
                 >
                   {sellectAddress.name}
@@ -169,7 +170,7 @@ export const DateCard = ({ user, post }) => {
                     <img src={arrow} className="h-5 w-5 mx-auto" alt="" />
                   </div>
                 )}
-              </>
+              </div>
             ))}
           </div>
           <ExpandMore onClick={handleExpandClick}>
@@ -189,6 +190,6 @@ export const DateCard = ({ user, post }) => {
           </Collapse>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 };

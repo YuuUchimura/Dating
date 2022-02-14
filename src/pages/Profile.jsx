@@ -57,7 +57,7 @@ export const Profile = () => {
       setCurrentUser(doc.data());
     });
     return unSub;
-  }, [user]);
+  }, [user, id]);
 
   return (
     <>
@@ -154,7 +154,6 @@ export const Profile = () => {
                     favoPost={favoPost}
                     user={user}
                     key={i}
-                    i={i}
                   />
                 );
               })}

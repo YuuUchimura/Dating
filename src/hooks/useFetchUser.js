@@ -15,7 +15,7 @@ export const useFetchUser = ({ user }) => {
   const [postUser, setPostUser] = useState([]);
 
   const fetchPostUser = async () => {
-    const DRef = query(collection(db, "user"), where("userid", "==", "userid"));
+    const DRef = query(collection(db, "user"), where("userid", "==", user.uid));
     const q = query(DRef);
     try {
       onSnapshot(q, (snapshot) => {

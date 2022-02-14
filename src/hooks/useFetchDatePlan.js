@@ -8,15 +8,12 @@ export const useFetchDatePlan = () => {
   const [posts, setPosts] = useState([]);
 
   //すべての投稿を取得昇順で取得している
-  const fetchDatePlan = async () => {
+  const fetchDatePlan = () => {
     const q = query(collection(db, "DatePlan"), orderBy("timeStamp", "desc"));
-    try {
-      onSnapshot(q, (snapshot) => {
-        setPosts(snapshot.docs.map((doc) => ({ ...doc.data() })));
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    const unSub = onSnapshot(q, (snapshot) => {
+      setPosts(snapshot.docs.map((doc) => ({ ...doc.data() })));
+    });
+    return unSub;
   };
 
   return {

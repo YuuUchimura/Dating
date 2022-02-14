@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import GoogleMapReact from "google-map-react";
@@ -24,7 +23,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 //プロフィールページの投稿
-export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
+export const FavoPostCard = ({ myAddress, i, user, favoPost }) => {
   const [expanded, setExpanded] = useState(false);
   const [isOpenImage, setOpenIsImage] = useState(true);
   const [favoAddress, setFavoAddress] = useState(myAddress[0]?.addresses);
@@ -122,32 +121,31 @@ export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
             <div className="p-1 w-32 rounded-full bg-gray-200">
               {favoPost.genre}
             </div>
-            <IconButton>
-              {favorite ? (
-                <FavoriteIcon
-                  onClick={() => {
-                    favo(favoPost);
-                  }}
-                  sx={{ color: red[500] }}
-                  className="cursor-pointer"
-                />
-              ) : (
-                <FavoriteIcon
-                  onClick={() => {
-                    favo(favoPost);
-                  }}
-                  className="cursor-pointer"
-                />
-              )}
-            </IconButton>
+            {/* <IconButton> */}
+            {favorite ? (
+              <FavoriteIcon
+                onClick={() => {
+                  favo(favoPost);
+                }}
+                sx={{ color: red[500] }}
+                className="cursor-pointer"
+              />
+            ) : (
+              <FavoriteIcon
+                onClick={() => {
+                  favo(favoPost);
+                }}
+                className="cursor-pointer"
+              />
+            )}
+            {/* </IconButton> */}
           </div>
           <div className="flex flex-col justify-around">
             {favoPost.addresses.map((item, i) => (
-              <>
+              <div key={i}>
                 <div
                   onClick={() => changeViewMap(item.id - 1, i)}
                   id={i}
-                  key={i}
                   className="cursor-pointer mx-auto"
                 >
                   {item.name}
@@ -157,7 +155,7 @@ export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
                     <img src={arrow} className="h-5 w-5 mx-auto" alt="" />
                   </div>
                 )}
-              </>
+              </div>
             ))}
           </div>
           <ExpandMore onClick={handleExpandClick}>
@@ -167,7 +165,7 @@ export const FavoPostCard = ({ i, myAddress, key, user, favoPost }) => {
           </ExpandMore>
           <Collapse in={expanded}>
             <p>{favoPost.description}</p>
-            <br/>
+            <br />
             <p>
               <span className="font-Skia rounded-full text-md bg-blue-400 m-0 px-1 py-1 text-white">
                 移動のポイント：
