@@ -141,7 +141,7 @@ export const FavoPostCard = ({ myAddress, i, user, favoPost }) => {
             {/* </IconButton> */}
           </div>
           <div className="flex flex-col justify-around">
-            {favoPost.addresses.map((item, i) => (
+            {favoPost.addresses?.map((item, i) => (
               <div key={i}>
                 <div
                   onClick={() => changeViewMap(item.id - 1, i)}

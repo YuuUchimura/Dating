@@ -178,7 +178,7 @@ export const MyPostCard = ({
               {/* </IconButton> */}
             </div>
             <div className="flex flex-col justify-around">
-              {currentPost.addresses.map((item, i) => (
+              {currentPost.addresses?.map((item, i) => (
                 <div key={i}>
                   <div
                     onClick={() => changeViewMap(item.id - 1, i)}
