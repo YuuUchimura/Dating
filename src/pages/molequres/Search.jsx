@@ -38,7 +38,7 @@ export const Search = ({ choice, setChoice, setChoiceValues }) => {
   return (
     <>
       <div
-        className="border-4 border-blue-400 md:text-xl font-semibold lg:fixed lg:top-56 lg:right-24 lg:w-1/4 py-5 mt-5 md:mt-0 md:py-10 md:px-5 rounded-lg bg-white"
+        className="border-4 border-blue-400 md:text-xl font-semibold lg:fixed lg:top-56 lg:right-24 lg:w-1/4 py-5 mt-5 lg:m-0 md:py-10 md:px-5 rounded-lg bg-white"
         onClick={handleOpen}
       >
         <div>

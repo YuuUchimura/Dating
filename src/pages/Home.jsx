@@ -14,6 +14,7 @@ import { LoginUserCard } from "./Organisms/LoginUserCard";
 import { LogoutButton } from "./atoms/Logout";
 import Avatar from "@mui/material/Avatar";
 import { Reference } from "./atoms/Reference";
+import love from "../images/love.png";
 
 export const Home = () => {
   const user = useContext(AuthContext);
@@ -36,7 +37,7 @@ export const Home = () => {
       <div className="bg-header-bg bg-cover shadow-lg">
         <header className="w-10/12 md:w-9/12 h-28 md:h-36 flex items-center justify-between mx-auto">
           <Link to="/">
-            <img width={300} src={Dating} alt="" />
+            <img width={300} src={Dating} alt="DatingIcon" />
           </Link>
           <div className="flex">
             <LogoutButton />
@@ -55,6 +56,11 @@ export const Home = () => {
             setChoiceValues={setChoiceValues}
           />
           <Reference />
+          <img
+            className="invisible lg:visible h-64 w-64 fixed bottom-28 right-20"
+            src={love}
+            alt="icon"
+          />
         </div>
         <h1 className="w-11/12 lg:w-8/12 my-5 mx-auto lg:mx-0 text-xl md:text-4xl">
           みんなの最高のデートプラン

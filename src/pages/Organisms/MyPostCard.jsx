@@ -27,7 +27,14 @@ const ExpandMore = styled((props) => {
 }));
 
 //プロフィールページの投稿
-export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
+export const MyPostCard = ({
+  id,
+  user,
+  currentPost,
+  i,
+  myAddress,
+  deletePost,
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -41,7 +48,7 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
 
   const click = (q) => {
     deletePost(q);
-    handleClose()
+    handleClose();
   };
 
   const favo = (currentPost) => {
@@ -113,9 +120,11 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
               <h1 className="pl-10 text-lg">{currentPost.title}</h1>
             </div>
             <>
-              <IconButton onClick={handleOpen}>
-                <MoreVertIcon />
-              </IconButton>
+              {user.uid === id ? (
+                <IconButton onClick={handleOpen}>
+                  <MoreVertIcon />
+                </IconButton>
+              ) : null}
               <Modal open={open} onClose={handleClose}>
                 <div className="flex flex-col mx-auto rounded-md shadow-md items-center p-4 w-52 mt-36 bg-white border">
                   <div>投稿を削除しますか？</div>
@@ -192,7 +201,7 @@ export const MyPostCard = ({ user, currentPost, i, myAddress, deletePost }) => {
             </ExpandMore>
             <Collapse in={expanded}>
               <p>{currentPost.description}</p>
-              <br/>
+              <br />
               <p>
                 <span className="font-Skia rounded-full text-md bg-blue-400 m-0 px-1 py-1 text-white">
                   移動のポイント

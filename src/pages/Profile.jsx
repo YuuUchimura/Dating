@@ -93,7 +93,7 @@ export const Profile = () => {
             </span>
             {user.uid === id ? <EditProfile /> : null}
           </div>
-          <div className="my-auto pt-5 md:h-3/4 w-3/5 md:py-10 md:w-2/6 flex flex-col justify-around text-xl md:text-2xl lg:text-3xl rounded-lg bg-white">
+          <div className="border-4 border-pink-300 my-auto pt-5 md:h-3/4 w-3/5 md:py-10 md:w-2/6 flex flex-col justify-around text-xl md:text-2xl lg:text-3xl rounded-lg bg-white">
             <div className="flex justify-around">
               <div>
                 <h2 className="font-Skia mb-3">sex</h2>
@@ -115,7 +115,7 @@ export const Profile = () => {
             </div>
           </div>
         </div>
-        <div className="text-lg md:text-2xl lg:text-3xl my-8  bg-white border-y-4 border-pink-300">
+        <div className="text-lg md:text-2xl lg:text-3xl my-8  bg-white border-y-4 border-blue-300">
           <div className="w-8/12 flex justify-between mx-auto">
             <span
               className="cursor-pointer py-5 font-Skia "
@@ -139,6 +139,7 @@ export const Profile = () => {
         <div className="md:flex flex-wrap">
           {isMyposts ? (
             <MyPosts
+              id={id}
               myAddress={myAddress}
               currentPosts={currentPosts}
               user={user}

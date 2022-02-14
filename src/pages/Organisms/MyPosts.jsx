@@ -6,6 +6,7 @@ export const MyPosts = ({
   currentPosts,
   myAddress,
   deletePost,
+  id
 }) => {
   return (
     <>
@@ -13,6 +14,7 @@ export const MyPosts = ({
         currentPosts.map((currentPost, i) => {
           return (
             <MyPostCard
+              id={id}
               icon={icon}
               user={user}
               currentPost={currentPost}
