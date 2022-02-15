@@ -198,7 +198,7 @@ export const MyPostCard = ({
             <ExpandMore onClick={handleExpandClick}>
               {expanded ? (
                 <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
-                  閉じる
+                  とじる
                 </p>
               ) : (
                 <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
