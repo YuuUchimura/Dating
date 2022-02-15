@@ -196,9 +196,15 @@ export const MyPostCard = ({
               ))}
             </div>
             <ExpandMore onClick={handleExpandClick}>
-              <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
-                どんなデートかみたい！
-              </p>
+              {expanded ? (
+                <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
+                  閉じる
+                </p>
+              ) : (
+                <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
+                  どんなデートかみたい！
+                </p>
+              )}
             </ExpandMore>
             <Collapse in={expanded}>
               <p>{currentPost.description}</p>
@@ -207,7 +213,7 @@ export const MyPostCard = ({
                 <span className="font-Skia rounded-full text-md bg-blue-400 m-0 px-1 py-1 text-white">
                   移動のポイント
                 </span>
-                ：{currentPost.movePoint}
+                {currentPost.movePoint}
               </p>
             </Collapse>
           </div>

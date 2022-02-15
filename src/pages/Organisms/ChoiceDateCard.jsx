@@ -160,19 +160,25 @@ export const ChoiceDateCard = ({ choiceValue, user }) => {
           </div>
 
           <ExpandMore onClick={handleExpandClick}>
-            <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
-              どんなデートかみたい！
-            </p>
+            {expanded ? (
+              <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
+                閉じる
+              </p>
+            ) : (
+              <p className="text-blue-700 hover:opacity-70 text-lg cursor-pointer">
+                どんなデートかみたい！
+              </p>
+            )}
           </ExpandMore>
 
           <Collapse in={expanded}>
             <p>{choiceValue.description}</p>
-            <br/>
+            <br />
             <p>
               <span className="font-Skia rounded-full text-md bg-blue-400 m-0 px-1 py-1 text-white">
                 移動のポイント
               </span>
-              <span>：{choiceValue.movePoint}</span>
+              <span>{choiceValue.movePoint}</span>
             </p>
           </Collapse>
         </div>
