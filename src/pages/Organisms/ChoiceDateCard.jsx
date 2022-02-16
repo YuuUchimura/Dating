@@ -117,8 +117,8 @@ export const ChoiceDateCard = ({ choiceValue, user }) => {
               />
             </div>
           )}
-          <div className="flex justify-between">
-            <div className="my-5 p-1 w-32 rounded-full bg-gray-200">
+          <div className="flex justify-between items-center">
+            <div className="my-5 p-1 w-40 rounded-full bg-gray-200">
               {choiceValue.genre}
             </div>
             <IconButton>

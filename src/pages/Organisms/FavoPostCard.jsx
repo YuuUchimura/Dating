@@ -117,8 +117,8 @@ export const FavoPostCard = ({ myAddress, i, user, favoPost }) => {
               />
             </div>
           )}
-          <div className="flex justify-between">
-            <div className="p-1 w-32 rounded-full bg-gray-200">
+          <div className="flex justify-between items-center">
+            <div className="p-1 w-40 rounded-full bg-gray-200">
               {favoPost.genre}
             </div>
             {/* <IconButton> */}
