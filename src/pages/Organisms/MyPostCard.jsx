@@ -117,7 +117,7 @@ export const MyPostCard = ({
               <Link to={`/profile/${currentPost.userid}`}>
                 <Avatar src={icon}></Avatar>
               </Link>
-              <h1 className="pl-10 text-lg">{currentPost.title}</h1>
+              <h1 className="pl-10 text-xl">{currentPost.title}</h1>
             </div>
             <>
               {user.uid === id ? (
